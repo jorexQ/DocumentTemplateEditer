@@ -1,0 +1,63 @@
+{
+  "name": "document-template-editer",
+  "version": "1.0.0",
+  "description": "custom documnet template editer",
+  "main": "main.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "custom",
+    "document",
+    "template",
+    "editer"
+  ],
+  "author": "JorexQ",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/electron-debug": "^1.1.0",
+    "@types/gulp": "^4.0.4",
+    "@types/webpack": "^3.0.9",
+    "awesome-typescript-loader": "^3.2.3",
+    "css-loader": "^0.28.4",
+    "devtron": "^1.4.0",
+    "electron": "^1.7.5",
+    "electron-builder": "^19.22.1",
+    "electron-debug": "^1.4.0",
+    "electron-devtools-installer": "^2.1.0",
+    "electron-packager": "^9.0.0",
+    "extract-text-webpack-plugin": "^3.0.0",
+    "gulp": "^3.9.1",
+    "gulp-minify-css": "^1.2.4",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^3.1.0",
+    "node-sass": "^4.5.3",
+    "sass-loader": "^6.0.6",
+    "source-map-loader": "^0.2.1",
+    "style-loader": "^0.18.2",
+    "uglifyjs-webpack-plugin": "^0.4.6",
+    "webpack": "^3.5.4",
+    "webpack-dev-server": "^2.7.1"
+  },
+  "dependencies": {
+    "@reactivex/rxjs": "^5.4.3",
+    "@types/node": "^8.0.22",
+    "@types/react": "^16.0.2",
+    "@types/react-css-modules": "^4.2.1",
+    "@types/react-dom": "^15.5.2",
+    "@types/react-redux": "^5.0.2",
+    "@types/redux": "^3.6.0",
+    "antd": "^2.12.6",
+    "classnames": "^2.2.5",
+    "moment": "^2.18.1",
+    "object-assign": "^4.1.1",
+    "prop-types": "^15.5.10",
+    "react": "^15.6.1",
+    "react-css-modules": "^4.7.0",
+    "react-dom": "^15.6.1",
+    "react-lazy-load": "^3.0.12",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
+    "typescript": "^2.4.2"
+  }
+}
