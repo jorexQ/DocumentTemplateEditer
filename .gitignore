@@ -1,4 +1,5 @@
 node_modules
 dist
-src/*.map
-*.map
+*.js
+*.js.map
+src/*.js.map
