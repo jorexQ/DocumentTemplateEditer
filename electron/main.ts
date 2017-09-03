@@ -1,4 +1,4 @@
-import {app, BrowserWindow, screen, globalShortcut} from 'electron'
+import { app, BrowserWindow, screen, globalShortcut } from 'electron'
 import electronDebug = require('electron-debug');
 import * as path from 'path'
 import * as url from 'url'
@@ -8,19 +8,19 @@ import * as url from 'url'
 
 const localUrl = 'C:\\Users\\Administrator\\AppData\\Local';
 const reactDevToolsUrl = 'Google\\Chrome\\User Data\\Default\\Extensions\\fmkadmapgofadopljbjfkapdkoienihi' +
-        '\\2.5.0_0';
+    '\\2.5.0_0';
 const reduxDevToolsUrl = 'Google\\Chrome\\User Data\\Default\\Extensions\\lmhkpmbekcpmknklioeibfkpmmfibljd' +
-        '\\2.15.1_0';
-let win : Electron.BrowserWindow;
+    '\\2.15.1_0';
+let win: Electron.BrowserWindow;
 
 function createWindow() {
 
-    electronDebug({showDevTools: true, enabled: true});
+    electronDebug({ showDevTools: true, enabled: true });
     // Create the browser window.
     BrowserWindow.addDevToolsExtension(path.join(localUrl, reactDevToolsUrl));
     BrowserWindow.addDevToolsExtension(path.join(localUrl, reduxDevToolsUrl));
 
-    win = new BrowserWindow({width: 1280, height: 720, frame: false});
+    win = new BrowserWindow({ width: 1280, height: 720, frame: false });
     win.maximize();
     win.setMenu(null);
     win.setTitle('electron demo');
