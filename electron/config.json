@@ -3,6 +3,7 @@
     "width": 720,
     "isMaximize": true,
     "isDebugger": true,
+    "startupFileUri": "index.html",
     "extendBaseUri": "C:\\Users\\Administrator\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions",
     "extends": [
         {
