@@ -3,7 +3,8 @@ export class ConfigLoadManager {
 
     constructor(configPath : string = '') {
         this.configStoragePath = configPath;
+        this.parseConfigJson();
     }
 
-    public parseConfigJosn() : void {}
+    public parseConfigJson() : void {}
 };
