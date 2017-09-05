@@ -1,16 +1,22 @@
 {
-    "height": 1280,
-    "width": 720,
-    "isMaximize": true,
-    "isDebugger": true,
-    "startupFileUri": "index.html",
-    "extendBaseUri": "C:\\Users\\Administrator\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Extensions",
-    "extends": [
-        {
-            "tokenKey": "fmkadmapgofadopljbjfkapdkoienihi"
-        },
-        {
-            "tokenKey": "lmhkpmbekcpmknklioeibfkpmmfibljd"
-        }
-    ]
+    "windowState": {
+        "height": 1280,
+        "width": 720,
+        "isMaximize": true
+    },
+    "startUp": {
+        "isDebugger": true,
+        "startupFileUri": "index.html"
+    },
+    "devtoolExtension": {
+        "extensionRootUri": "C:\\Users\\Administrator\\AppData\\Local\\Google\\Chrome\\User Data\\Default\\Ex" +
+                "tensions",
+        "extensions": [
+            {
+                "tokenKey": "fmkadmapgofadopljbjfkapdkoienihi"
+            }, {
+                "tokenKey": "lmhkpmbekcpmknklioeibfkpmmfibljd"
+            }
+        ]
+    }
 }
