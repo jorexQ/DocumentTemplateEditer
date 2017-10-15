@@ -21,8 +21,13 @@
     "awesome-typescript-loader": "^3.2.3",
     "css-loader": "^0.28.4",
     "devtron": "^1.4.0",
+<<<<<<< HEAD
     "electron": "^1.7.9",
     "electron-builder": "^19.37.2",
+=======
+    "electron": "^1.7.6",
+    "electron-builder": "^19.27.7",
+>>>>>>> cabc2e86235c8906f18eae635a910153a15e2ae0
     "electron-debug": "^1.4.0",
     "electron-devtools-installer": "^2.1.0",
     "electron-packager": "^9.1.0",
@@ -36,6 +41,7 @@
     "source-map-loader": "^0.2.2",
     "style-loader": "^0.19.0",
     "uglifyjs-webpack-plugin": "^0.4.6",
+<<<<<<< HEAD
     "webpack": "^3.7.1",
     "webpack-dev-server": "^2.9.1"
   },
@@ -46,6 +52,18 @@
     "@types/react-css-modules": "^4.2.1",
     "@types/react-dom": "^16.0.1",
     "@types/react-redux": "^5.0.10",
+=======
+    "webpack": "^3.5.6",
+    "webpack-dev-server": "^2.7.1"
+  },
+  "dependencies": {
+    "@reactivex/rxjs": "^5.4.3",
+    "@types/node": "^8.0.28",
+    "@types/react": "^16.0.2",
+    "@types/react-css-modules": "^4.2.1",
+    "@types/react-dom": "^15.5.2",
+    "@types/react-redux": "^5.0.7",
+>>>>>>> cabc2e86235c8906f18eae635a910153a15e2ae0
     "@types/redux": "^3.6.0",
     "antd": "^2.13.6",
     "classnames": "^2.2.5",
