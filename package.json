@@ -21,13 +21,8 @@
     "awesome-typescript-loader": "^3.2.3",
     "css-loader": "^0.28.4",
     "devtron": "^1.4.0",
-<<<<<<< HEAD
     "electron": "^1.7.9",
     "electron-builder": "^19.37.2",
-=======
-    "electron": "^1.7.6",
-    "electron-builder": "^19.27.7",
->>>>>>> cabc2e86235c8906f18eae635a910153a15e2ae0
     "electron-debug": "^1.4.0",
     "electron-devtools-installer": "^2.1.0",
     "electron-packager": "^9.1.0",
