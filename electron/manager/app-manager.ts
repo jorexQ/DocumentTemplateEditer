@@ -1,7 +1,7 @@
 import { WindowStateManager, WindowStateOption } from './window-state-manager';
 import { IpcEventManager } from './ipc-event-manager';
 import { DevtoolExtensionManager, DevtoolExtensionOption, DevtoolExtensionOptionItem } from './devtool-extension-manager';
-import { ConfigLoadManager, CustomConvertMethod } from './config-load-manager';
+import { ConfigLoadManager, CustomConvertMethod, GetOptionMethod } from './config-load-manager';
 import { PluginManager } from './plugin-manager';
 
 export interface AppOption {
@@ -17,21 +17,31 @@ export class AppManager {
     private readonly configLoadManager: ConfigLoadManager;
     private readonly pluginManager: PluginManager;
 
+    private readonly baseConfigGetter: GetOptionMethod;
     private readonly appOption: AppOption;
 
     constructor(configPath: string = '') {
-        this.configLoadManager = new ConfigLoadManager(configPath);
-        this.appOption = this.configLoadManager.getOption<AppOption>("", (result) => {
-            let currentAppOption = <AppOption>result;
+        this.configLoadManager = new ConfigLoadManager();
 
-            
-        })
+        this.baseConfigGetter = this.configLoadManager.syncLoadConfigJson(configPath);
+
+        this.appOption = this.baseConfigGetter<AppOption>("appOption", (result) => {
+            let currentAppOption: AppOption = <AppOption>result;
+
+            return Object.assign({
+                pluginDirectory: './plugin',
+                isDebugger: false,
+                startUpFileUri: 'index.html'
+            }, currentAppOption);
+        });
+    }
+
+    public async prepareThings() {
+
 
     }
 
-    public prepareThings() { }
+    public async init() { }
 
-    public init() { }
-
-    public star() { }
+    public async star() { }
 };
