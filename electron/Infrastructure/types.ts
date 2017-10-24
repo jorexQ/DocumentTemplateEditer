@@ -16,29 +16,22 @@ export interface ExtensionConfig {
     extensionTokens?: string[];
 };
 
-export interface AsyncStorage<T extends any> {
-    get(key: string): Promise<T>;
-    set(key: string, json: T): Promise<void>;
-    has(key: string): Promise<boolean>;
-    keys(): Promise<string[]>;
-    remove(key: string): Promise<void>;
-    clear(): Promise<void>;
-    getMany(keys: string[]): Promise<any & {}>;
+export interface AsyncStorage<T extends any> {  
+    asyncGet(key: string): Promise<T>;
+    asyncSet(key: string, obj: T): Promise<void>;
+    asyncHas(key: string): Promise<boolean>;
+    asyncKeys(): Promise<string[]>;
+    asyncRemove(key: string): Promise<void>;
+    asyncClear(): Promise<void>;
+    asyncGetMany(keys: string[]): Promise<T[]>;
 };
 
-export interface Storage<T extends any> {
+export interface SyncStorage<T extends any> {
     get(key: string): T;
-    asyncGet(key: string): Promise<T>;
     set(key: string, obj: T): void;
-    asyncSet(key: string, obj: T): Promise<void>;
     has(key: string): boolean;
-    asyncHas(key: string): Promise<boolean>;
     keys(): string[];
-    asyncKeys(): Promise<string[]>;
     remove(key: string): void;
-    asyncRemove(key: string): Promise<void>;
     clear(): void;
-    asyncClear(): Promise<void>;
     getMany(keys: string[]): T[];
-    asyncGetMany(keys: string[]): Promise<T[]>;
 };
