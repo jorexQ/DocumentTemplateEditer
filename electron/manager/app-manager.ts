@@ -11,21 +11,21 @@ export interface AppOption {
 }
 
 export class AppManager {
-    private readonly windowStateManager: WindowStateManager;
-    private readonly ipcEventManager: IpcEventManager;
-    private readonly devtoolExtensionManager: DevtoolExtensionManager;
-    private readonly configLoadManager: ConfigLoadManager;
-    private readonly pluginManager: PluginManager;
+    private readonly _windowStateManager: WindowStateManager;
+    private readonly _ipcEventManager: IpcEventManager;
+    private readonly _devtoolExtensionManager: DevtoolExtensionManager;
+    private readonly _configLoadManager: ConfigLoadManager;
+    private readonly _pluginManager: PluginManager;
 
-    private readonly baseConfigGetter: GetOptionMethod;
-    private readonly appOption: AppOption;
+    private readonly _baseConfigGetter: GetOptionMethod;
+    private readonly _appOption: AppOption;
 
     constructor(configPath: string = '') {
-        this.configLoadManager = new ConfigLoadManager();
+        this._configLoadManager = new ConfigLoadManager();
 
-        this.baseConfigGetter = this.configLoadManager.syncLoadConfigJson(configPath);
+        this._baseConfigGetter = this._configLoadManager.syncLoadConfigJson(configPath);
 
-        this.appOption = this.baseConfigGetter<AppOption>("appOption", (result) => {
+        this._appOption = this._baseConfigGetter<AppOption>("appOption", (result) => {
             let currentAppOption: AppOption = <AppOption>result;
 
             return Object.assign({
