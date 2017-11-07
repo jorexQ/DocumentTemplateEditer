@@ -5,5 +5,4 @@ export class JsonStore {
     constructor(isSaveNative : boolean) {
         this.isSaveNative = isSaveNative;
     }
-
 };

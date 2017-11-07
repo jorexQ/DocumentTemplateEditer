@@ -1,11 +1,15 @@
-//
-type QueueMehodType = () => Promise<void>;
+import { SyncWaiter } from './sync-waiter';
+
+enum FileActionType {
+    Read = 0,
+    Write = 1
+};
 
 //
-type ReleaseLockMethodType = () => Promise<void>;
+type QueueMehodType = () => void;
 
 //
-type CallBackMehodType<T, T1> = (this: T, releaseLockMethod: ReleaseLockMethodType) => T1;
+type CallBackMehodType<T, T1> = (this: T, releaseLockMethod: () => void) => T1;
 
 /**
  * 
@@ -26,59 +30,10 @@ export interface LockOptions<T, T1> {
  * 
  * 
  * @export
- * @class SyncWaiter
- */
-export class SyncWaiter {
-    private readonly _timeout: number;
-    private readonly _whenMehod: () => boolean;
-
-    constructor(timeout: number, whenMehod: () => boolean) {
-        this._timeout = timeout;
-        this._whenMehod = whenMehod;
-    }
-
-    /**
-     * 
-     * 
-     * @returns {void} 
-     * @memberof SyncWaiter
-     */
-    run<T>(execMethod: () => T): T {
-        let isDone: boolean = false;
-        let isTimeout: boolean = false;
-        var currentUseTime = 0;
-        var clearIntervalTimeout = setInterval(() => {
-            currentUseTime++;
-            if (currentUseTime === this._timeout) {
-                isTimeout = true;
-                clearInterval(clearIntervalTimeout);
-                clearIntervalTimeout = null;
-            }
-        }, 1);
-
-        do {
-            isDone = this._whenMehod();
-        } while (!isDone && !isTimeout);
-
-        if (clearIntervalTimeout) {
-            clearInterval(clearIntervalTimeout);
-        }
-
-        if (isTimeout) {
-            return execMethod();
-        } else {
-            return null;
-        }
-    }
-};
-
-/**
- * 
- * 
- * @export
  * @class RWLock
  */
 export class RWLock {
+
     /**
      * 
      * 
@@ -141,8 +96,7 @@ export class RWLock {
 
         let keyRWLock: RWLock = new RWLock();
 
-        this
-            ._mapInstance
+        this._mapInstance
             .set(key, keyRWLock);
 
         return keyRWLock;
@@ -154,33 +108,179 @@ export class RWLock {
      * @returns {boolean} 
      * @memberof RWLock
      */
-    public checkIsLocking(action: 'read' | 'write'): boolean {
-        if (action === 'read') {
+    public checkIsLocking(action: FileActionType): boolean {
+        if (action === FileActionType.Read) {
             return this._readers < 0 || this._awaitExecuteQueue.length > 0;
-        } else if (action === 'write') {
+        } else if (action === FileActionType.Write) {
             return this._readers > 0 || this._awaitExecuteQueue.length > 0;
         } else {
             throw new TypeError();
         }
     }
 
-    public read<T, T1>(option: LockOptions<T, T1>): T1 {
-        return null;
+    /**
+     * 
+     * 
+     * @param {FileActionType} action 
+     * @memberof RWLock
+     */
+    public releaseLock(action: FileActionType): void {
+        if (action === FileActionType.Read) {
+            this._readers--;
+            if (this._awaitExecuteQueue.length > 0) {
+                this._awaitExecuteQueue[0]();
+            }
+        } else if (action === FileActionType.Write) {
+            this._readers = 0;
+            if (this._awaitExecuteQueue.length > 0) {
+                this._awaitExecuteQueue[0]();
+            }
+        } else {
+            throw new TypeError();
+        }
+    }
+
+    /**
+     * 
+     * 
+     * @template T 
+     * @template T1 
+     * @param {LockOptions<T, T1>} option 
+     * @returns {T1} 
+     * @memberof RWLock
+     */
+    public syncRead<T, T1>(option: LockOptions<T, T1>): T1 {
+        let readContent: T1;
+
+        this._awaitExecuteQueue.push(() => {
+            this._readers++;
+            this._awaitExecuteQueue.shift();
+            readContent = option.callBack.call(option.scope, () => this.releaseLock(FileActionType.Read));
+        });
+
+        let syncWaiter = new SyncWaiter(option.timeout, () => this.checkIsLocking(FileActionType.Read));
+        syncWaiter.run(() => {
+            if (this._awaitExecuteQueue.length > 0) {
+                this._awaitExecuteQueue[0]();
+            }
+        }, () => {
+            this._awaitExecuteQueue.shift();
+            if (option.timeoutCallBack) option.timeoutCallBack.call(option.scope);
+        });
+
+        return readContent;
     };
 
-    public write<T, T1>(option: LockOptions<T, T1>): T1 {
-        return null;
+    /**
+     * 
+     * 
+     * @template T 
+     * @param {LockOptions<T, void>} option 
+     * @memberof RWLock
+     */
+    public syncWrite<T>(option: LockOptions<T, void>): void {
+        this._awaitExecuteQueue.push(() => {
+            this._readers = -1;
+            this._awaitExecuteQueue.shift();
+            option.callBack.call(option.scope, () => this.releaseLock(FileActionType.Write));
+        });
+
+        let syncWaiter = new SyncWaiter(option.timeout, () => this.checkIsLocking(FileActionType.Write));
+        syncWaiter.run(() => {
+            if (this._awaitExecuteQueue.length > 0) {
+                this._awaitExecuteQueue[0]();
+            }
+        }, () => {
+            this._awaitExecuteQueue.shift();
+            if (option.timeoutCallBack) option.timeoutCallBack.call(option.scope);
+        });
     };
 
+    /**
+     * 
+     * 
+     * @template T 
+     * @template T1 
+     * @param {LockOptions<T, T1>} option 
+     * @returns {Promise<T1>} 
+     * @memberof RWLock
+     */
     public asyncRead<T, T1>(option: LockOptions<T, T1>): Promise<T1> {
+        let readContent: T1;
+        if (this.checkIsLocking(FileActionType.Read)) {
+            return new Promise((resolve, reject) => {
 
+                this._awaitExecuteQueue.push(() => {
+                    this._readers++;
+                    this._awaitExecuteQueue.shift();
+                    readContent = option.callBack.call(option.scope, () => this.releaseLock(FileActionType.Read));
 
-        return null;
+                    if (this._awaitExecuteQueue.length > 0) {
+                        this._awaitExecuteQueue[0]();
+                    }
+
+                    resolve(readContent);
+                });
+                if (option.timeoutCallBack && option.timeout) {
+                    setTimeout(function () {
+                        this._awaitExecuteQueue.shift();
+                        readContent = option.timeoutCallBack.call(option.scope);
+
+                        resolve(readContent);
+                    }, option.timeout);
+                }
+            });
+        } else {
+            return new Promise((resolve, reject) => {
+                this._readers++;
+                this._awaitExecuteQueue.shift();
+                readContent = option.callBack.call(option.scope, () => this.releaseLock(FileActionType.Read));
+
+                resolve(readContent);
+            });
+        }
     };
 
-    public asyncWrite<T, T1>(option: LockOptions<T, T1>): Promise<T1> {
+    /**
+     * 
+     * 
+     * @template T 
+     * @param {LockOptions<T, void>} option 
+     * @returns {Promise<void>} 
+     * @memberof RWLock
+     */
+    public asyncWrite<T>(option: LockOptions<T, void>): Promise<void> {
+        if (this.checkIsLocking(FileActionType.Read)) {
+            return new Promise((resolve, reject) => {
 
+                this._awaitExecuteQueue.push(() => {
+                    this._readers = -1;
+                    this._awaitExecuteQueue.shift();
+                    option.callBack.call(option.scope, () => this.releaseLock(FileActionType.Write));
 
-        return null;
+                    if (this._awaitExecuteQueue.length > 0) {
+                        this._awaitExecuteQueue[0]();
+                    }
+
+                    resolve();
+                });
+                if (option.timeoutCallBack && option.timeout) {
+                    setTimeout(function () {
+                        this._awaitExecuteQueue.shift();
+                        option.timeoutCallBack.call(option.scope);
+
+                        resolve();
+                    }, option.timeout);
+                }
+            });
+        } else {
+            return new Promise((resolve, reject) => {
+                this._readers = -1;
+                this._awaitExecuteQueue.shift();
+                option.callBack.call(option.scope, () => this.releaseLock(FileActionType.Write));
+
+                resolve();
+            });
+        }
     };
 };
