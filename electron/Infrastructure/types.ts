@@ -1,3 +1,4 @@
+import { extend } from './base-tool';
 export type BaseEventKey = "resize" | "move"
     | "devtools-opened" | "devtools-closed"
     | "close" | "closed" | "maximize" | "unmaximize" | "minimize"
@@ -16,7 +17,7 @@ export interface ExtensionConfig {
     extensionTokens?: string[];
 };
 
-export interface AsyncStorage<T extends any> {  
+export interface AsyncStorage<T extends any> {
     asyncGet(key: string): Promise<T>;
     asyncSet(key: string, obj: T): Promise<void>;
     asyncHas(key: string): Promise<boolean>;
@@ -35,3 +36,5 @@ export interface SyncStorage<T extends any> {
     clear(): void;
     getMany(keys: string[]): T[];
 };
+
+export interface Storage<T extends any> extends AsyncStorage<T>, SyncStorage<T> { };

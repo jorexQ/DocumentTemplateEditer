@@ -1,4 +1,5 @@
 import { SyncWaiter } from './sync-waiter';
+import { isPromise } from './base-tool';
 
 enum FileActionType {
     Read = 0,
@@ -205,10 +206,10 @@ export class RWLock {
      * @returns {Promise<T1>} 
      * @memberof RWLock
      */
-    public asyncRead<T, T1>(option: LockOptions<T, T1>): Promise<T1> {
+    public async asyncRead<T, T1>(option: LockOptions<T, T1>): Promise<T1> {
         let readContent: T1;
         if (this.checkIsLocking(FileActionType.Read)) {
-            return new Promise((resolve, reject) => {
+            return new Promise<T1>((resolve, reject) => {
 
                 this._awaitExecuteQueue.push(() => {
                     this._readers++;
@@ -218,7 +219,7 @@ export class RWLock {
                     if (this._awaitExecuteQueue.length > 0) {
                         this._awaitExecuteQueue[0]();
                     }
-
+                    
                     resolve(readContent);
                 });
                 if (option.timeoutCallBack && option.timeout) {
@@ -231,7 +232,7 @@ export class RWLock {
                 }
             });
         } else {
-            return new Promise((resolve, reject) => {
+            return new Promise<T1>((resolve, reject) => {
                 this._readers++;
                 this._awaitExecuteQueue.shift();
                 readContent = option.callBack.call(option.scope, () => this.releaseLock(FileActionType.Read));
@@ -249,9 +250,9 @@ export class RWLock {
      * @returns {Promise<void>} 
      * @memberof RWLock
      */
-    public asyncWrite<T>(option: LockOptions<T, void>): Promise<void> {
+    public async asyncWrite<T>(option: LockOptions<T, void>): Promise<void> {
         if (this.checkIsLocking(FileActionType.Read)) {
-            return new Promise((resolve, reject) => {
+            return new Promise<void>((resolve, reject) => {
 
                 this._awaitExecuteQueue.push(() => {
                     this._readers = -1;
@@ -274,7 +275,7 @@ export class RWLock {
                 }
             });
         } else {
-            return new Promise((resolve, reject) => {
+            return new Promise<void>((resolve, reject) => {
                 this._readers = -1;
                 this._awaitExecuteQueue.shift();
                 option.callBack.call(option.scope, () => this.releaseLock(FileActionType.Write));

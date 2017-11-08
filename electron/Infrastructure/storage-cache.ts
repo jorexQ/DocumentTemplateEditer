@@ -1,4 +1,4 @@
-import { AsyncStorage, SyncStorage } from './types';
+import { Storage } from './types';
 
 /**
  * 
@@ -9,7 +9,7 @@ import { AsyncStorage, SyncStorage } from './types';
  * @implements {SyncStorage<T>}
  * @template T 
  */
-export class StorageCache<T extends any> implements AsyncStorage<T>, SyncStorage<T> {
+export class StorageCache<T extends any> implements Storage<T> {
     private readonly _cacheWrapHasKey: string;
 
     /**
@@ -19,82 +19,6 @@ export class StorageCache<T extends any> implements AsyncStorage<T>, SyncStorage
      */
     constructor(cacheWrapHasKey: string) {
         this._cacheWrapHasKey = cacheWrapHasKey;
-    }
-
-    /**
-     * 
-     * 
-     * @param {string} key 
-     * @returns {Promise<T>} 
-     * @memberof StorageCache
-     */
-    asyncGet(key: string): Promise<T> {
-        throw new Error("Method not implemented.");
-    }
-
-    /**
-     * 
-     * 
-     * @param {string} key 
-     * @param {T} obj 
-     * @returns {Promise<void>} 
-     * @memberof StorageCache
-     */
-    asyncSet(key: string, obj: T): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
-
-    /**
-     * 
-     * 
-     * @param {string} key 
-     * @returns {Promise<boolean>} 
-     * @memberof StorageCache
-     */
-    asyncHas(key: string): Promise<boolean> {
-        throw new Error("Method not implemented.");
-    }
-
-    /**
-     * 
-     * 
-     * @returns {Promise<string[]>} 
-     * @memberof StorageCache
-     */
-    asyncKeys(): Promise<string[]> {
-        throw new Error("Method not implemented.");
-    }
-
-    /**
-     * 
-     * 
-     * @param {string} key 
-     * @returns {Promise<void>} 
-     * @memberof StorageCache
-     */
-    asyncRemove(key: string): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
-
-    /**
-     * 
-     * 
-     * @returns {Promise<void>} 
-     * @memberof StorageCache
-     */
-    asyncClear(): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
-
-    /**
-     * 
-     * 
-     * @param {string[]} keys 
-     * @returns {Promise<T[]>} 
-     * @memberof StorageCache
-     */
-    asyncGetMany(keys: string[]): Promise<T[]> {
-        throw new Error("Method not implemented.");
     }
 
     /**
@@ -158,7 +82,7 @@ export class StorageCache<T extends any> implements AsyncStorage<T>, SyncStorage
     clear(): void {
         throw new Error("Method not implemented.");
     }
-    
+
     /**
      * 
      * 
@@ -167,6 +91,82 @@ export class StorageCache<T extends any> implements AsyncStorage<T>, SyncStorage
      * @memberof StorageCache
      */
     getMany(keys: string[]): T[] {
+        throw new Error("Method not implemented.");
+    }
+
+    /**
+     * 
+     * 
+     * @param {string} key 
+     * @returns {Promise<T>} 
+     * @memberof StorageCache
+     */
+    async asyncGet(key: string): Promise<T> {
+        throw new Error("Method not implemented.");
+    }
+
+    /**
+     * 
+     * 
+     * @param {string} key 
+     * @param {T} obj 
+     * @returns {Promise<void>} 
+     * @memberof StorageCache
+     */
+    async asyncSet(key: string, obj: T): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+
+    /**
+     * 
+     * 
+     * @param {string} key 
+     * @returns {Promise<boolean>} 
+     * @memberof StorageCache
+     */
+    async asyncHas(key: string): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
+
+    /**
+     * 
+     * 
+     * @returns {Promise<string[]>} 
+     * @memberof StorageCache
+     */
+    async asyncKeys(): Promise<string[]> {
+        throw new Error("Method not implemented.");
+    }
+
+    /**
+     * 
+     * 
+     * @param {string} key 
+     * @returns {Promise<void>} 
+     * @memberof StorageCache
+     */
+    async asyncRemove(key: string): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+
+    /**
+     * 
+     * 
+     * @returns {Promise<void>} 
+     * @memberof StorageCache
+     */
+    async asyncClear(): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+
+    /**
+     * 
+     * 
+     * @param {string[]} keys 
+     * @returns {Promise<T[]>} 
+     * @memberof StorageCache
+     */
+    async asyncGetMany(keys: string[]): Promise<T[]> {
         throw new Error("Method not implemented.");
     }
 }

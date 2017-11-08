@@ -1,3 +1,22 @@
+import { JsonStore } from '../infrastructure/json-store';
+import { Storage } from '../infrastructure/types';
+import { StorageFile } from '../Infrastructure/storage-file';
+import { JsonStore } from '../Infrastructure/json-store';
+
+//
+export type CustomConvertMethod<T> = (result: any) => T;
+
+//
+export type GetOptionMethod = <T extends {}>(rootKey: string, customConvertMethod?: CustomConvertMethod<T>) => T;
+
+/**
+ * 
+ * 
+ * @template T 
+ * @param {string} rootKey 
+ * @param {CustomConvertMethod<T>} [customConvertMethod] 
+ * @returns {T} 
+ */
 function getOption<T extends {}>(rootKey: string, customConvertMethod?: CustomConvertMethod<T>): T {
     if (!customConvertMethod) {
         customConvertMethod = (result) => {
@@ -18,10 +37,12 @@ function getOption<T extends {}>(rootKey: string, customConvertMethod?: CustomCo
     }
 }
 
-export type CustomConvertMethod<T> = (result: any) => T;
-
-export type GetOptionMethod = <T extends {}>(rootKey: string, customConvertMethod?: CustomConvertMethod<T>) => T;
-
+/**
+ * 
+ * 
+ * @export
+ * @class ConfigLoadManager
+ */
 export class ConfigLoadManager {
     private readonly configRootPath: string
     constructor(configRootPath: string = '') {
@@ -29,6 +50,12 @@ export class ConfigLoadManager {
     }
 
     public syncLoadConfigJson(configStoragePath: string): GetOptionMethod {
+
+        let storageFile: StorageFile = new StorageFile(configStoragePath);
+        
+        let jsonStore = new JsonStore(storageFile);
+
+        
 
         let configJsonContent: any;
 

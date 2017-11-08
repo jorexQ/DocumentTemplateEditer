@@ -1,5 +1,7 @@
-import { AsyncStorage, SyncStorage } from './types';
-import { RWLock } from './rw-lock';
+import { Storage } from './types';
+import { RWLock, LockOptions } from './rw-lock';
+import { JsonStore } from './json-store';
+import fs from 'fs';
 
 /**
  * 
@@ -9,7 +11,7 @@ import { RWLock } from './rw-lock';
  * @implements {AsyncStorage<string>}
  * @implements {SyncStorage<string>}
  */
-export class StorageFile implements AsyncStorage<string>, SyncStorage<string> {
+export class StorageFile implements Storage<string> {
     private _filePath: string;
 
     /**
@@ -19,6 +21,31 @@ export class StorageFile implements AsyncStorage<string>, SyncStorage<string> {
      */
     constructor(filePath: string) {
         this._filePath = filePath;
+    }
+
+    private async asyncGetFileContent(): Promise<{}> {
+        let rwLock = RWLock.getCurrent();
+        let option: LockOptions<void, Promise<{}>> = {
+            callBack: () => new Promise<{}>((resolve, reject) => {
+                fs.readFile(this._filePath, (ex, data) => {
+                    let contentStr = data.toString();
+                    let obj = JSON.parse(contentStr) as {};
+                    resolve(obj);
+                });
+            }),
+            scope: null,
+            timeout: 20000,
+        };
+        let promise = await rwLock.asyncRead(option)
+        return promise;
+    }
+
+    private getFileContent(): {} {
+        return null;
+    }
+
+    private setFileContent() {
+
     }
 
     /**
@@ -101,7 +128,7 @@ export class StorageFile implements AsyncStorage<string>, SyncStorage<string> {
      * @returns {Promise<string>} 
      * @memberof StorageFile
      */
-    asyncGet(key: string): Promise<string> {
+    async asyncGet(key: string): Promise<string> {
         throw new Error("Method not implemented.");
     }
 
@@ -113,7 +140,7 @@ export class StorageFile implements AsyncStorage<string>, SyncStorage<string> {
      * @returns {Promise<void>} 
      * @memberof StorageFile
      */
-    asyncSet(key: string, obj: string): Promise<void> {
+    async asyncSet(key: string, obj: string): Promise<void> {
         throw new Error("Method not implemented.");
     }
 
@@ -124,7 +151,7 @@ export class StorageFile implements AsyncStorage<string>, SyncStorage<string> {
      * @returns {Promise<boolean>} 
      * @memberof StorageFile
      */
-    asyncHas(key: string): Promise<boolean> {
+    async asyncHas(key: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
@@ -134,7 +161,7 @@ export class StorageFile implements AsyncStorage<string>, SyncStorage<string> {
      * @returns {Promise<string[]>} 
      * @memberof StorageFile
      */
-    asyncKeys(): Promise<string[]> {
+    async asyncKeys(): Promise<string[]> {
         throw new Error("Method not implemented.");
     }
 
@@ -145,7 +172,7 @@ export class StorageFile implements AsyncStorage<string>, SyncStorage<string> {
      * @returns {Promise<void>} 
      * @memberof StorageFile
      */
-    asyncRemove(key: string): Promise<void> {
+    async asyncRemove(key: string): Promise<void> {
         throw new Error("Method not implemented.");
     }
 
@@ -155,7 +182,7 @@ export class StorageFile implements AsyncStorage<string>, SyncStorage<string> {
      * @returns {Promise<void>} 
      * @memberof StorageFile
      */
-    asyncClear(): Promise<void> {
+    async asyncClear(): Promise<void> {
         throw new Error("Method not implemented.");
     }
 
@@ -166,7 +193,7 @@ export class StorageFile implements AsyncStorage<string>, SyncStorage<string> {
      * @returns {Promise<string[]>} 
      * @memberof StorageFile
      */
-    asyncGetMany(keys: string[]): Promise<string[]> {
+    async asyncGetMany(keys: string[]): Promise<string[]> {
         throw new Error("Method not implemented.");
     }
 }
