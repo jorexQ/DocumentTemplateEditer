@@ -1,6 +1,6 @@
 import { Storage } from './types';
 import { RWLock, LockOptions } from './rw-lock';
-import { JsonStore } from './json-store';
+import { JsonStoreByFile } from './json-store';
 import fs from 'fs';
 
 /**
@@ -8,10 +8,9 @@ import fs from 'fs';
  * 
  * @export
  * @class StorageFile
- * @implements {AsyncStorage<string>}
- * @implements {SyncStorage<string>}
+ * @implements {Storage}
  */
-export class StorageFile implements Storage<string> {
+export class StorageFile implements Storage {
     private _filePath: string;
 
     /**
@@ -51,22 +50,24 @@ export class StorageFile implements Storage<string> {
     /**
      * 
      * 
+     * @template T 
      * @param {string} key 
-     * @returns {string} 
+     * @returns {T} 
      * @memberof StorageFile
      */
-    get(key: string): string {
+    get<T extends any>(key: string): T {
         throw new Error("Method not implemented.");
     }
 
     /**
      * 
      * 
+     * @template T 
      * @param {string} key 
-     * @param {string} obj 
+     * @param {T} obj 
      * @memberof StorageFile
      */
-    set(key: string, obj: string): void {
+    set<T extends any>(key: string, obj: T): void {
         throw new Error("Method not implemented.");
     }
 
@@ -113,34 +114,37 @@ export class StorageFile implements Storage<string> {
     /**
      * 
      * 
+     * @template T 
      * @param {string[]} keys 
-     * @returns {string[]} 
+     * @returns {T[]} 
      * @memberof StorageFile
      */
-    getMany(keys: string[]): string[] {
+    getMany<T extends any>(keys: string[]): T[] {
         throw new Error("Method not implemented.");
     }
 
     /**
      * 
      * 
+     * @template T 
      * @param {string} key 
-     * @returns {Promise<string>} 
+     * @returns {Promise<T>} 
      * @memberof StorageFile
      */
-    async asyncGet(key: string): Promise<string> {
+    asyncGet<T extends any>(key: string): Promise<T> {
         throw new Error("Method not implemented.");
     }
 
     /**
      * 
      * 
+     * @template T 
      * @param {string} key 
-     * @param {string} obj 
+     * @param {T} obj 
      * @returns {Promise<void>} 
      * @memberof StorageFile
      */
-    async asyncSet(key: string, obj: string): Promise<void> {
+    asyncSet<T extends any>(key: string, obj: T): Promise<void> {
         throw new Error("Method not implemented.");
     }
 
@@ -151,7 +155,7 @@ export class StorageFile implements Storage<string> {
      * @returns {Promise<boolean>} 
      * @memberof StorageFile
      */
-    async asyncHas(key: string): Promise<boolean> {
+    asyncHas(key: string): Promise<boolean> {
         throw new Error("Method not implemented.");
     }
 
@@ -161,7 +165,7 @@ export class StorageFile implements Storage<string> {
      * @returns {Promise<string[]>} 
      * @memberof StorageFile
      */
-    async asyncKeys(): Promise<string[]> {
+    asyncKeys(): Promise<string[]> {
         throw new Error("Method not implemented.");
     }
 
@@ -172,7 +176,7 @@ export class StorageFile implements Storage<string> {
      * @returns {Promise<void>} 
      * @memberof StorageFile
      */
-    async asyncRemove(key: string): Promise<void> {
+    asyncRemove(key: string): Promise<void> {
         throw new Error("Method not implemented.");
     }
 
@@ -182,18 +186,19 @@ export class StorageFile implements Storage<string> {
      * @returns {Promise<void>} 
      * @memberof StorageFile
      */
-    async asyncClear(): Promise<void> {
+    asyncClear(): Promise<void> {
         throw new Error("Method not implemented.");
     }
 
     /**
      * 
      * 
+     * @template T 
      * @param {string[]} keys 
-     * @returns {Promise<string[]>} 
+     * @returns {Promise<T[]>} 
      * @memberof StorageFile
      */
-    async asyncGetMany(keys: string[]): Promise<string[]> {
+    asyncGetMany<T extends any>(keys: string[]): Promise<T[]> {
         throw new Error("Method not implemented.");
     }
 }

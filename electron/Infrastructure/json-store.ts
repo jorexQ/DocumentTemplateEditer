@@ -1,26 +1,15 @@
-import { Storage } from './types';
 
-export class JsonStore {
-
-    private readonly _storage: Storage<string>;
-
-    constructor(storage: Storage<string>) {
-        this._storage = storage;
-    }
-
-    public set<T extends {}>(keyStr: string, value: T) {
+export class JsonStoreByFile {
+    constructor() {
 
     }
 
-    public async asyncSet<T extends {}>(keyStr: string, value: T): Promise<void> {
 
-    }
-
-    public get<T extends {}>(keyStr: string): T {
-        return null;
-    }
-
-    public async asyncGet<T extends {}>(keyStr: string): Promise<T> {
-        return null;
-    }
 };
+
+export class JsonStoreByCache {
+    constructor() {
+
+    }
+
+}

@@ -17,24 +17,24 @@ export interface ExtensionConfig {
     extensionTokens?: string[];
 };
 
-export interface AsyncStorage<T extends any> {
-    asyncGet(key: string): Promise<T>;
-    asyncSet(key: string, obj: T): Promise<void>;
+export interface AsyncStorage {
+    asyncGet<T extends any>(key: string): Promise<T>;
+    asyncSet<T extends any>(key: string, obj: T): Promise<void>;
     asyncHas(key: string): Promise<boolean>;
     asyncKeys(): Promise<string[]>;
     asyncRemove(key: string): Promise<void>;
     asyncClear(): Promise<void>;
-    asyncGetMany(keys: string[]): Promise<T[]>;
+    asyncGetMany<T extends any>(keys: string[]): Promise<T[]>;
 };
 
-export interface SyncStorage<T extends any> {
-    get(key: string): T;
-    set(key: string, obj: T): void;
+export interface SyncStorage {
+    get<T extends any>(key: string): T;
+    set<T extends any>(key: string, obj: T): void;
     has(key: string): boolean;
     keys(): string[];
     remove(key: string): void;
     clear(): void;
-    getMany(keys: string[]): T[];
+    getMany<T extends any>(keys: string[]): T[];
 };
 
-export interface Storage<T extends any> extends AsyncStorage<T>, SyncStorage<T> { };
+export interface Storage extends SyncStorage, AsyncStorage { };

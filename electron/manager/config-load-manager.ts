@@ -1,7 +1,5 @@
-import { JsonStore } from '../infrastructure/json-store';
 import { Storage } from '../infrastructure/types';
 import { StorageFile } from '../Infrastructure/storage-file';
-import { JsonStore } from '../Infrastructure/json-store';
 
 //
 export type CustomConvertMethod<T> = (result: any) => T;
@@ -50,12 +48,6 @@ export class ConfigLoadManager {
     }
 
     public syncLoadConfigJson(configStoragePath: string): GetOptionMethod {
-
-        let storageFile: StorageFile = new StorageFile(configStoragePath);
-        
-        let jsonStore = new JsonStore(storageFile);
-
-        
 
         let configJsonContent: any;
 
