@@ -1,6 +1,12 @@
 import { SyncStorage } from './types';
 import { JsonStoreByCache } from './json-store';
 
+interface CacheContext {
+    timeout: number,
+    actionDateTime: Date,
+    content: any,
+}
+
 /**
  * 
  * 
@@ -24,6 +30,34 @@ export class StorageCache implements SyncStorage {
     /**
      * 
      * 
+     * @private
+     * @param {string} key 
+     * @param {CacheContext} cacheContext 
+     * @returns {boolean} 
+     * @memberof StorageCache
+     */
+    private checkTimeOut(key: string, cacheContext: CacheContext): boolean {
+        let actionDateTime = cacheContext.actionDateTime;
+        let differenceValue = new Date().getTime() - actionDateTime.getTime();
+        return differenceValue > cacheContext.timeout;
+    }
+
+    private getContext(content: any, timeout: number): CacheContext {
+        return {
+            content: content,
+            actionDateTime: new Date(),
+            timeout: timeout
+        };
+    }
+
+    private paresContext(jsonStr: string): CacheContext {
+        let jsonObj = JSON.parse(jsonStr);
+        return jsonObj as CacheContext;
+    }
+
+    /**
+     * 
+     * 
      * @template T 
      * @param {string} key 
      * @returns {T} 
@@ -39,9 +73,10 @@ export class StorageCache implements SyncStorage {
      * @template T 
      * @param {string} key 
      * @param {T} obj 
+     * @param {(number | null)} [timeout=10000] 
      * @memberof StorageCache
      */
-    set<T extends any>(key: string, obj: T): void {
+    set<T extends any>(key: string, obj: T, timeout: number | null = 10000): void {
         throw new Error("Method not implemented.");
     }
 
