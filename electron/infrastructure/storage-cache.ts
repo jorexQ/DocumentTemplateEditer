@@ -42,6 +42,15 @@ export class StorageCache implements SyncStorage {
         return differenceValue > cacheContext.timeout;
     }
 
+    /**
+     * 
+     * 
+     * @private
+     * @param {*} content 
+     * @param {number} timeout 
+     * @returns {CacheContext} 
+     * @memberof StorageCache
+     */
     private getContext(content: any, timeout: number): CacheContext {
         return {
             content: content,
@@ -49,7 +58,15 @@ export class StorageCache implements SyncStorage {
             timeout: timeout
         };
     }
-
+    
+    /**
+     * 
+     * 
+     * @private
+     * @param {string} jsonStr 
+     * @returns {CacheContext} 
+     * @memberof StorageCache
+     */
     private paresContext(jsonStr: string): CacheContext {
         let jsonObj = JSON.parse(jsonStr);
         return jsonObj as CacheContext;
