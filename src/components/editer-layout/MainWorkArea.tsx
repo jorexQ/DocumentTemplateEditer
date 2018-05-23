@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {Layout} from 'antd';
-const {Content} = Layout;
+import { Layout } from 'antd';
+const { Content } = Layout;
 
 import '../../assist/styles/editer-layout/main-work-area.scss';
 
@@ -10,32 +10,31 @@ interface MainWorkAreaProps {
 };
 
 interface MainWorkAreaState {
-    canvasHeight : number
+    canvasHeight: number
 };
 
-export class MainWorkArea extends React.Component < MainWorkAreaProps,
-MainWorkAreaState > {
+export class MainWorkArea extends React.Component<MainWorkAreaProps, MainWorkAreaState> {
 
-    constructor() {
-        super();
+    constructor(props: MainWorkAreaProps) {
+        super(props);
         this.state = {
             canvasHeight: 0
         };
     }
 
-    public render() {
+    public render () {
         return <Content className='main-work-area'>
             <div
                 className='canvas-wrap'
-                style={{
-                height: this.state.canvasHeight + 'px'
-            }}>
+                style={ {
+                    height: this.state.canvasHeight + 'px'
+                } }>
                 Main Work Area
             </div>
         </Content>;
     }
 
-    public setCanvasHeight() {
+    public setCanvasHeight () {
         let windowHeight = window.innerHeight;
         let headerHeight = this.props.headerHeight
             ? this.props.headerHeight
@@ -48,12 +47,12 @@ MainWorkAreaState > {
         });
     }
 
-    public componentDidMount() {
+    public componentDidMount () {
         this.setCanvasHeight()
         window.addEventListener('resize', this.setCanvasHeight.bind(this));
     }
 
-    public componentWillUnmount() {
+    public componentWillUnmount () {
         window.removeEventListener('resize', this.setCanvasHeight.bind(this));
     }
 }

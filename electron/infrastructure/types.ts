@@ -1,4 +1,3 @@
-import { extend } from './base-tool';
 export type BaseEventKey = "resize" | "move"
     | "devtools-opened" | "devtools-closed"
     | "close" | "closed" | "maximize" | "unmaximize" | "minimize"

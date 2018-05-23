@@ -22,7 +22,6 @@ export class EditerView extends React.Component<EditerViewProps, EditerViewState
             headerHeight: 34,
             footerHeight: 70
         }
-
     }
 
     public render () {

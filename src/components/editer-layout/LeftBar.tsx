@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Layout} from 'antd';
+import { Layout } from 'antd';
 const {Sider} = Layout;
 
 interface LeftBarProps {};
