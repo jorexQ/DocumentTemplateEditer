@@ -2,10 +2,10 @@ import { Storage } from '../infrastructure/types';
 import { StorageFile } from '../Infrastructure/storage-file';
 
 //
-export type CustomConvertMethod<T> = (result: any) => T;
+export type CustomConvertMethod<T> = (result: T) => T;
 
 //
-export type GetOptionMethod = <T extends {}>(rootKey: string, customConvertMethod?: CustomConvertMethod<T>) => T;
+export type GetOptionMethod<T> = <T extends {}>(rootKey: string, customConvertMethod?: CustomConvertMethod<T>) => T;
 
 /**
  * 
@@ -18,7 +18,7 @@ export type GetOptionMethod = <T extends {}>(rootKey: string, customConvertMetho
 function getOption<T extends {}>(rootKey: string, customConvertMethod?: CustomConvertMethod<T>): T {
     if (!customConvertMethod) {
         customConvertMethod = (result) => {
-            return <T>result;
+            return result;
         };
     };
 
@@ -47,17 +47,17 @@ export class ConfigLoadManager {
         this.configRootPath = configRootPath;
     }
 
-    public syncLoadConfigJson(configStoragePath: string): GetOptionMethod {
+    public syncLoadConfigJson<T>(configStoragePath: string): GetOptionMethod<T> {
 
         let configJsonContent: any;
 
         return null;
     }
 
-    public async asyncLoadConfigJson(configStoragePath: string): Promise<GetOptionMethod> {
+    public async asyncLoadConfigJson<T>(configStoragePath: string): Promise<GetOptionMethod<T>> {
 
         let configJsonContent: any;
 
-        return new Promise<GetOptionMethod>(null);
+        return new Promise<GetOptionMethod<T>>(null);
     }
 };

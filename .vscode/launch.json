@@ -12,7 +12,7 @@
             "windows": {
                 "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
             },
-            "program": "${workspaceRoot}/dist/bootstrap.js",
+            "program": "${workspaceRoot}/electron/startup.js",
             "protocol":  "legacy"
         },
         {
@@ -24,7 +24,7 @@
                 "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
             },
             "runtimeArgs": [
-                "${workspaceRoot}/dist/bootstrap.js",
+                "${workspaceRoot}/electron/startup.js",
                 "--remote-debugging-port=8315"
             ]
         },

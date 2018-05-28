@@ -1,6 +1,7 @@
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const { CheckerPlugin } = require('awesome-typescript-loader');
 
 
 var extractLayoutTheme = new ExtractTextPlugin({
@@ -8,6 +9,7 @@ var extractLayoutTheme = new ExtractTextPlugin({
 });
 
 module.exports = {
+    mode: 'development',
     entry: {
         content: "./src/index.tsx"
     },
@@ -39,12 +41,12 @@ module.exports = {
             test: /\.scss$/,
             use: extractLayoutTheme.extract({
                 use: [{
-                        loader: 'css-loader',
-                        options: {
-                            minimize: true
-                        }
-                    },
-                    { loader: 'sass-loader' }
+                    loader: 'css-loader',
+                    options: {
+                        minimize: true
+                    }
+                },
+                { loader: 'sass-loader' }
                 ],
                 fallback: 'style-loader'
             }),
@@ -65,7 +67,11 @@ module.exports = {
         "styled-components": "styled"
     },
     plugins: [
+        new CheckerPlugin(),
         extractLayoutTheme,
+        new UglifyJSPlugin({
+            sourceMap: true
+        })
     ]
 
 
