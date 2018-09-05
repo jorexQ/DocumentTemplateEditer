@@ -3,7 +3,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const { CheckerPlugin } = require('awesome-typescript-loader');
 
-
 var extractLayoutTheme = new ExtractTextPlugin({
     filename: "styles/editer-layout-theme.min.css"
 });
