@@ -24,7 +24,7 @@ export class StorageFile implements Storage {
 
   private async asyncGetFileContent(): Promise<{}> {
     let rwLock = RWLock.getCurrent();
-    let option: LockOptions<void, Promise<{}>> = {
+    let option: LockOptions<null, Promise<{}>> = {
       callBack: () =>
         new Promise<{}>((resolve, reject) => {
           fs.readFile(this._filePath, (ex, data) => {
@@ -34,10 +34,15 @@ export class StorageFile implements Storage {
           });
         }),
       scope: null,
-      timeout: 20000
+      timeout: 20000,
+      timeoutCallBack: () => null
     };
-    let promise = await rwLock.asyncRead(option);
-    return promise;
+
+    if (rwLock) {
+      return await rwLock.asyncRead(option);
+    } else {
+      return {};
+    }
   }
 
   private getFileContent(): {} {

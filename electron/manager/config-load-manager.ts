@@ -23,7 +23,7 @@ function getOption<T extends {}>(rootKey: string, customConvertMethod?: CustomCo
     };
 
     if (!this.configJsonContent) {
-        return customConvertMethod(null);
+        return customConvertMethod(<T>{});
     }
 
     var currentValue = this.configJsonContent[rootKey];
@@ -31,7 +31,7 @@ function getOption<T extends {}>(rootKey: string, customConvertMethod?: CustomCo
     if (currentValue) {
         return customConvertMethod(currentValue);
     } else {
-        return customConvertMethod(null);
+        return customConvertMethod(<T>{});
     }
 }
 
@@ -47,7 +47,7 @@ export class ConfigLoadManager {
         this.configRootPath = configRootPath;
     }
 
-    public syncLoadConfigJson<T>(configStoragePath: string): GetOptionMethod<T> {
+    public syncLoadConfigJson<T>(configStoragePath: string): GetOptionMethod<T> |null {
 
         let configJsonContent: any;
 
@@ -58,6 +58,6 @@ export class ConfigLoadManager {
 
         let configJsonContent: any;
 
-        return new Promise<GetOptionMethod<T>>(null);
+        return new Promise<GetOptionMethod<T>>(function(){});
     }
 };

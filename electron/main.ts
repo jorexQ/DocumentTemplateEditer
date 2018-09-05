@@ -33,7 +33,7 @@ function createWindow() {
     }));
 
     win.on('closed', () => {
-        win = null
+        win.destroy();
     });
 
     //globalShortcut.register('', () => {})
