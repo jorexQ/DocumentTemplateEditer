@@ -19,5 +19,5 @@
     "typescript.disableAutomaticTypeAcquisition": true,
     "typescript.format.insertSpaceBeforeFunctionParenthesis": true,
     "git.confirmSync": false,
-    "git.enableSmartCommit": true
-  }
+    "git.enableSmartCommit": true,
+}
