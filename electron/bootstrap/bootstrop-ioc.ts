@@ -1,33 +1,12 @@
-import { BootstrapEventBus } from "./bootstrap-event-bus";
+import getDecorators from "inversify-inject-decorators";
 import { IocTool } from "../infrastructure/ioc-tool";
 
-import { AppManager } from "../manager/app-manager";
-import { WindowStateManager } from "../manager/window-state-manager";
-import { IpcEventManager } from "../manager/ipc-event-manager";
-import { ChromeExtensionManager } from "../manager/chrome-extension-manager";
-import { ConfigLoadManager } from "../manager/config-load-manager";
-import { PluginManager } from "../manager/plugin-manager";
-import { LocalFileManager } from "../manager/local-file-manager";
+const iocTool = new IocTool();
 
-const managerClassArr = [
-  AppManager,
-  WindowStateManager,
-  IpcEventManager,
-  ChromeExtensionManager,
-  ConfigLoadManager,
-  PluginManager,
-  LocalFileManager
-];
+const decorators = getDecorators(iocTool.container);
 
-export default function managerLoad(iocTool: IocTool) {
-  iocTool.RegisterSingletonClass(BootstrapEventBus);
+export const lazyInject = decorators.lazyInject;
 
-  managerClassArr.forEach(constructor =>
-    iocTool.RegisterSingletonClass(constructor)
-  );
-
-  let container = iocTool.container;
-  managerClassArr.forEach(constructor => {
-    container.resolve(constructor);
-  });
+export function getSingleIoc() {
+  return iocTool;
 }

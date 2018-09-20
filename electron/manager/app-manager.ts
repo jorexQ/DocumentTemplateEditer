@@ -1,5 +1,4 @@
 import "reflect-metadata";
-import getDecorators from "inversify-inject-decorators";
 import { injectable, inject } from "inversify";
 import { nameof } from "ts-simple-nameof";
 import { WindowStateManager } from "./window-state-manager";
@@ -8,11 +7,8 @@ import { ChromeExtensionManager } from "./chrome-extension-manager";
 import { ConfigLoadManager, GetOptionMethod } from "./config-load-manager";
 import { PluginManager } from "./plugin-manager";
 import { BaseManager } from "../bootstrap/base-manager";
-import { BootstrapCore } from "../bootstrap/bootstrap-core";
 import { BootstrapEventBus } from "../bootstrap/bootstrap-event-bus";
-
-let aa = new BootstrapCore();
-let { lazyInject } = getDecorators(BootstrapCore.impl().managerContainer);
+import { lazyInject } from "../bootstrap/bootstrop-ioc";
 
 export interface AppOption {
   pluginDirectory?: string;

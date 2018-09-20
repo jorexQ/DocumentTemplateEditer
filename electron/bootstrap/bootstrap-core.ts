@@ -1,5 +1,7 @@
 import { Container } from "inversify";
 import { IocTool } from "../infrastructure/ioc-tool";
+import { getSingleIoc } from "./bootstrop-ioc";
+import { managerLoad } from "./bootstrop-ioc-load";
 
 /**
  *启动引导器
@@ -18,12 +20,11 @@ export class BootstrapCore {
    * @memberof Bootstrap
    */
   public constructor() {
-    let iocTool = new IocTool();
+    let iocTool = getSingleIoc();
     this.managerContainer = this.getManagerContainer(iocTool);
   }
 
   public getManagerContainer(iocTool: IocTool): Container {
-    let managerLoad = require("./bootstrop-ioc");
     managerLoad(iocTool);
     return iocTool.container;
   }
