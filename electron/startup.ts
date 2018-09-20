@@ -1,19 +1,5 @@
-import {app, BrowserWindow} from 'electron'
-import * as path from 'path'
-import * as url from 'url'
+import { BootstrapCore } from "./bootstrap/bootstrap-core";
 
-let win : Electron.BrowserWindow;
+const bootstrap = BootstrapCore.impl();
 
-app.on('ready', async () => {
-    
-    
-});
-
-// Quit when all windows are closed.
-app.on('window-all-closed', () => {
-    // On macOS it is common for applications and their menu bar to stay active
-    // until the user quits explicitly with Cmd + Q
-    if (process.platform !== 'darwin') {
-        app.quit()
-    }
-});
+bootstrap.open();

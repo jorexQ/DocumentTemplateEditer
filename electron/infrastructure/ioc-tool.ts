@@ -6,9 +6,9 @@ type constructor<T> = new (...params: any[]) => T;
 export class IocTool {
   public readonly container: Container;
 
-  public RegisterClass<T>(constructor: constructor<T>): IocTool {
+  public RegisterSingletonClass<T>(constructor: constructor<T>): IocTool {
     var typeName = nameof(constructor);
-    this.container.bind<T>(typeName).to(constructor);
+    this.container.bind<T>(typeName).to(constructor).inSingletonScope();
     return this;
   }
 

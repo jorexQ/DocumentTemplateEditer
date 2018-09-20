@@ -1,27 +1,18 @@
-import { BaseManager } from "../bootstrap/base-manager";
-import { Bootstrap } from "../bootstrap/bootstrap";
-import { BootstrapEventBus } from "../bootstrap/bootstrap-event-bus";
 import "reflect-metadata";
-import { Container, injectable, inject } from "inversify";
 import getDecorators from "inversify-inject-decorators";
+import { injectable, inject } from "inversify";
 import { nameof } from "ts-simple-nameof";
-
-const { lazyInject } = getDecorators(Bootstrap.impl.managerContainer);
-
-import { WindowStateManager, WindowStateOption } from "./window-state-manager";
+import { WindowStateManager } from "./window-state-manager";
 import { IpcEventManager } from "./ipc-event-manager";
-import {
-  ChromeExtensionManager,
-  ChromeExtensionOption,
-  ChromeExtensionOptionItem
-} from "./chrome-extension-manager";
-import {
-  ConfigLoadManager,
-  CustomConvertMethod,
-  GetOptionMethod
-} from "./config-load-manager";
+import { ChromeExtensionManager } from "./chrome-extension-manager";
+import { ConfigLoadManager, GetOptionMethod } from "./config-load-manager";
 import { PluginManager } from "./plugin-manager";
-import { app } from "electron";
+import { BaseManager } from "../bootstrap/base-manager";
+import { BootstrapCore } from "../bootstrap/bootstrap-core";
+import { BootstrapEventBus } from "../bootstrap/bootstrap-event-bus";
+
+let aa = new BootstrapCore();
+let { lazyInject } = getDecorators(BootstrapCore.impl().managerContainer);
 
 export interface AppOption {
   pluginDirectory?: string;
