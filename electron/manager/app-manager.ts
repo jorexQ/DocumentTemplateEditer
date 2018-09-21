@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { injectable, inject } from "inversify";
-import { nameof } from "ts-simple-nameof";
+import { nameof } from "../infrastructure/base-tool";
 import { WindowStateManager } from "./window-state-manager";
 import { IpcEventManager } from "./ipc-event-manager";
 import { ChromeExtensionManager } from "./chrome-extension-manager";

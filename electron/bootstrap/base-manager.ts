@@ -1,5 +1,5 @@
 import { injectable, inject } from "inversify";
-import { nameof } from "ts-simple-nameof";
+import { nameof } from "../infrastructure/base-tool";
 import { BootstrapEventBus } from "./bootstrap-event-bus";
 
 @injectable()

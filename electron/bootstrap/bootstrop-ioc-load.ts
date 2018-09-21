@@ -8,6 +8,7 @@ import { ChromeExtensionManager } from "../manager/chrome-extension-manager";
 import { ConfigLoadManager } from "../manager/config-load-manager";
 import { PluginManager } from "../manager/plugin-manager";
 import { LocalFileManager } from "../manager/local-file-manager";
+import { nameof } from "../infrastructure/base-tool";
 
 const managerClassArr = [
   AppManager,
@@ -20,7 +21,7 @@ const managerClassArr = [
 ];
 
 export function managerLoad(iocTool: IocTool) {
-  iocTool.RegisterSingletonClass(BootstrapEventBus);
+  iocTool.RegisterConstantValue(new BootstrapEventBus());
 
   managerClassArr.forEach(constructor =>
     iocTool.RegisterSingletonClass(constructor)
@@ -28,6 +29,6 @@ export function managerLoad(iocTool: IocTool) {
 
   let container = iocTool.container;
   managerClassArr.forEach(constructor => {
-    container.resolve(constructor);
+    container.get(constructor);
   });
 }
