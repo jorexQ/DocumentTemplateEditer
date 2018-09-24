@@ -8,7 +8,6 @@ import { ChromeExtensionManager } from "../manager/chrome-extension-manager";
 import { ConfigLoadManager } from "../manager/config-load-manager";
 import { PluginManager } from "../manager/plugin-manager";
 import { LocalFileManager } from "../manager/local-file-manager";
-import { nameof } from "../infrastructure/base-tool";
 
 const managerClassArr = [
   AppManager,
