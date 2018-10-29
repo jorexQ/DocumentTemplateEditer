@@ -11,5 +11,4 @@ export class PluginManager extends BaseManager  {
       ) {
         super(bootstrapEventBus);
       }
-
 };
