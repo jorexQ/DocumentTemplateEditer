@@ -1,7 +1,8 @@
 import { Container } from "inversify";
 import { IocTool } from "../infrastructure/ioc-tool";
-import { getSingleIoc } from "./bootstrop-ioc";
-import { managerLoad } from "./bootstrop-ioc-load";
+import { getSingleIoc } from "./bootstrap-ioc";
+import { managerLoad } from "./bootstrap-ioc-load";
+import { BootstrapOptions, BootstrapContext } from "./bootstrap-context";
 
 /**
  *启动引导器
@@ -11,22 +12,34 @@ import { managerLoad } from "./bootstrop-ioc-load";
  */
 export class BootstrapCore {
   public readonly managerContainer: Container;
+  public readonly context: BootstrapContext;
 
   /**
    * 引导器构造 会做的事:
    * 1.获取依赖容器，并注册基础管理器。
-   *
+   *0
    *
    * @memberof Bootstrap
    */
-  public constructor() {
+  public constructor(bootstrapOptions: BootstrapOptions | undefined) {
+    this.context = this.getContext(bootstrapOptions);
     let iocTool = getSingleIoc();
     this.managerContainer = this.getManagerContainer(iocTool);
   }
 
   public getManagerContainer(iocTool: IocTool): Container {
-    managerLoad(iocTool);
+    managerLoad(iocTool, this.context);
     return iocTool.container;
+  }
+
+  public getContext(
+    bootstrapOptions: BootstrapOptions | undefined
+  ): BootstrapContext {
+    let options = bootstrapOptions || {
+      startHtmlUrl: "",
+      startOptionUrl: ""
+    };
+    return new BootstrapContext(options);
   }
 
   /**
@@ -54,13 +67,19 @@ export class BootstrapCore {
    */
   private async starting(): Promise<void> {}
 
-  public async open(): Promise<void> {}
+  public async open(): Promise<void> {
+    await this.preparing();
+    await this.initializing();
+    await this.starting();
+  }
 
   private static instance: BootstrapCore;
 
-  public static impl(): BootstrapCore {
+  public static impl(
+    bootstrapOptions?: BootstrapOptions | undefined
+  ): BootstrapCore {
     if (!this.instance) {
-      this.instance = new BootstrapCore();
+      this.instance = new BootstrapCore(bootstrapOptions);
     }
     return this.instance;
   }

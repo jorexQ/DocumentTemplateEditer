@@ -1,4 +1,5 @@
 import { BootstrapEventBus } from "./bootstrap-event-bus";
+import { BootstrapContext } from "./bootstrap-context";
 import { IocTool } from "../infrastructure/ioc-tool";
 
 import { AppManager } from "../manager/app-manager";
@@ -19,8 +20,8 @@ const managerClassArr = [
   LocalFileManager
 ];
 
-export function managerLoad(iocTool: IocTool) {
-  iocTool.RegisterConstantValue(new BootstrapEventBus());
+export function managerLoad(iocTool: IocTool, bootstrapContext:BootstrapContext) {
+  iocTool.RegisterConstantValue(new BootstrapEventBus(bootstrapContext));
 
   managerClassArr.forEach(constructor =>
     iocTool.RegisterSingletonClass(constructor)

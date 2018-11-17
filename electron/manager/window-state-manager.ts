@@ -10,9 +10,8 @@ export interface WindowStateOption {
   isMaximize: boolean;
 }
 
-
 @injectable()
-export class WindowStateManager extends BaseManager  {
+export class WindowStateManager extends BaseManager {
   // public name: string;
   private readonly _stateOption: WindowStateOption;
 
@@ -24,5 +23,5 @@ export class WindowStateManager extends BaseManager  {
 
   public initByOption(option: WindowStateOption) {}
 
-  public refreshByOptoin(option: WindowStateOption) {}
+  public refreshByOption(option: WindowStateOption) {}
 }

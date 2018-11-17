@@ -7,8 +7,13 @@ import { ChromeExtensionManager } from "./chrome-extension-manager";
 import { ConfigLoadManager, GetOptionMethod } from "./config-load-manager";
 import { PluginManager } from "./plugin-manager";
 import { BaseManager } from "../bootstrap/base-manager";
-import { BootstrapEventBus } from "../bootstrap/bootstrap-event-bus";
-import { lazyInject } from "../bootstrap/bootstrop-ioc";
+import {
+  BootstrapEventBus,
+  BootstrapEventType,
+  BootstrapArg
+} from "../bootstrap/bootstrap-event-bus";
+import { lazyInject } from "../bootstrap/bootstrap-ioc";
+import { BootstrapContext } from "../bootstrap/bootstrap-context";
 
 export interface AppOption {
   pluginDirectory?: string;
@@ -16,7 +21,7 @@ export interface AppOption {
   startUpFileUri?: string;
 }
 
-const defatulOptoin: AppOption = {
+const defatulOption: AppOption = {
   pluginDirectory: "./plugin",
   isDebugger: false,
   startUpFileUri: "index.html"
@@ -56,5 +61,26 @@ export class AppManager extends BaseManager {
     //   configField,
     //   currentAppOption => Object.assign(defatulOptoin, currentAppOption)
     // );
+  }
+
+  protected async initializingHandle(
+    this: BootstrapContext,
+    arg: BootstrapArg
+  ): Promise<void> {
+    console.log("AppManager initializing");
+  }
+
+  protected async preparingHandle(
+    this: BootstrapContext,
+    arg: BootstrapArg
+  ): Promise<void> {
+    console.log("AppManager preparing");
+  }
+
+  protected async startingHandle(
+    this: BootstrapContext,
+    arg: BootstrapArg
+  ): Promise<void> {
+    console.log("AppManager starting");
   }
 }

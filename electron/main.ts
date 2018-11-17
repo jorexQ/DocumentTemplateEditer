@@ -1,5 +1,5 @@
 import { app, BrowserWindow, screen, globalShortcut } from 'electron'
-import electronDebug = require('electron-debug');
+import electronDebug from 'electron-debug';
 import * as path from 'path'
 import * as url from 'url'
 

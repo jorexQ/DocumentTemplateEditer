@@ -3,18 +3,31 @@ export type EventHandler<TContext, TArg> = (
   arg: TArg
 ) => Promise<void>;
 
-export class EventBus<TContext, TArg> {
-  private _handlerList: Map<string, EventHandler<TContext, TArg>>;
+export abstract class EventBus<TEventKey extends string, TContext, TArg> {
+  protected _handlerList: Map<
+    TEventKey,
+    EventHandler<TContext, TArg>
+  > = new Map<TEventKey, EventHandler<TContext, TArg>>();
 
-  public registerHandler(
-    eventContext: new () => TContext,
-    eventName: string,
+  protected register(
+    eventContext: TContext ,
+    eventName: TEventKey,
     eventHandler: EventHandler<TContext, TArg>
-  ) {}
+  ) {
+    this._handlerList.set(eventName, eventHandler);
+  }
 
-  public async triggerHandler(
-    eventContext: new () => TContext,
-    eventName: string,
+  protected async trigger(
+    eventContext: TContext,
+    eventName: TEventKey,
     arg: TArg
-  ) {}
+  ) {
+    let handler = this._handlerList.get(eventName);
+    if (handler) {
+      let promise = handler.call(eventContext, arg);
+      return <Promise<void>>promise;
+    } else {
+      return;
+    }
+  }
 }
