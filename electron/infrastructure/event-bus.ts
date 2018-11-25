@@ -6,15 +6,20 @@ export type EventHandler<TContext, TArg> = (
 export abstract class EventBus<TEventKey extends string, TContext, TArg> {
   protected _handlerList: Map<
     TEventKey,
-    EventHandler<TContext, TArg>
-  > = new Map<TEventKey, EventHandler<TContext, TArg>>();
+    EventHandler<TContext, TArg>[]
+  > = new Map<TEventKey, EventHandler<TContext, TArg>[]>();
 
   protected register(
-    eventContext: TContext ,
+    eventContext: TContext,
     eventName: TEventKey,
     eventHandler: EventHandler<TContext, TArg>
   ) {
-    this._handlerList.set(eventName, eventHandler);
+    let handlerList = this._handlerList.get(eventName);
+    if (!handlerList) {
+      handlerList = [];
+    }
+    handlerList.push(eventHandler);
+    this._handlerList.set(eventName, handlerList);
   }
 
   protected async trigger(
@@ -22,10 +27,13 @@ export abstract class EventBus<TEventKey extends string, TContext, TArg> {
     eventName: TEventKey,
     arg: TArg
   ) {
-    let handler = this._handlerList.get(eventName);
-    if (handler) {
-      let promise = handler.call(eventContext, arg);
-      return <Promise<void>>promise;
+    let handlerList = this._handlerList.get(eventName);
+    if (handlerList) {
+      let promiseList = handlerList.map(x => {
+        let promise = x.call(eventContext, arg);
+        return <Promise<void>>promise;
+      });
+      return Promise.all(promiseList);
     } else {
       return;
     }

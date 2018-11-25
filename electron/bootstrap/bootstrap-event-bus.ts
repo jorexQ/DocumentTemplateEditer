@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { EventBus } from "../infrastructure/event-bus";
 import { injectable } from "inversify";
 import { EventHandler } from "../infrastructure/event-bus";
@@ -32,9 +33,10 @@ export class BootstrapEventBus extends EventBus<
   public async triggerHandler(
     eventName: BootstrapEventType,
     arg: BootstrapArg
-  ) {}
+  ) {
+    await this.trigger(this.context, eventName, arg);
+  }
 }
-
 
 export class BootstrapArg {
   constructor() {}

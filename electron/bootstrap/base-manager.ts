@@ -9,17 +9,19 @@ import { EventHandler } from "../infrastructure/event-bus";
 import { BootstrapContext } from "./bootstrap-context";
 
 @injectable()
-export class BaseManager {
+export abstract class BaseManager {
   protected readonly bootstrapEventBus: BootstrapEventBus;
 
   constructor(
     @inject(nameof(BootstrapEventBus)) bootstrapEventBus: BootstrapEventBus
   ) {
     this.bootstrapEventBus = bootstrapEventBus;
-
+    let self = this;
     bootstrapEventBus.registerHandler(
       BootstrapEventType.initializing,
-      this.initializingHandle
+      async function(this: BootstrapContext, arg: BootstrapArg) {
+        await self.initializingHandle.call(this,BootstrapArg);
+      }
     );
 
     bootstrapEventBus.registerHandler(
@@ -33,18 +35,18 @@ export class BaseManager {
     );
   }
 
-  protected async initializingHandle(
+  protected abstract async initializingHandle(
     this: BootstrapContext,
     arg: BootstrapArg
-  ): Promise<void> {}
+  ): Promise<void>
 
-  protected async preparingHandle(
+  protected abstract async preparingHandle(
     this: BootstrapContext,
     arg: BootstrapArg
-  ): Promise<void> {}
+  ): Promise<void> 
 
-  protected async startingHandle(
+  protected abstract async startingHandle(
     this: BootstrapContext,
     arg: BootstrapArg
-  ): Promise<void> {}
+  ): Promise<void>
 }

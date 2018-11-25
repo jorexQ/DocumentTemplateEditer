@@ -3,9 +3,10 @@ import { injectable, inject } from "inversify";
 
 import { nameof } from "../infrastructure/base-tool";
 import { BaseManager } from "../bootstrap/base-manager";
-import { BootstrapEventBus } from "../bootstrap/bootstrap-event-bus";
+import { BootstrapEventBus, BootstrapArg } from "../bootstrap/bootstrap-event-bus";
 import { Storage } from "../infrastructure/types";
 import { StorageFile } from "../Infrastructure/storage-file";
+import { BootstrapContext } from "../bootstrap/bootstrap-context";
 
 //
 export type CustomConvertMethod<T> = (result: T) => T;
@@ -76,5 +77,26 @@ export class ConfigLoadManager extends BaseManager {
     let configJsonContent: any;
 
     return new Promise<GetOptionMethod<T>>(function() {});
+  }
+  
+  protected async initializingHandle(
+    this: BootstrapContext,
+    arg: BootstrapArg
+  ): Promise<void> {
+    console.log("ConfigLoadManager initializing");
+  }
+
+  protected async preparingHandle(
+    this: BootstrapContext,
+    arg: BootstrapArg
+  ): Promise<void> {
+    console.log("ConfigLoadManager preparing");
+  }
+
+  protected async startingHandle(
+    this: BootstrapContext,
+    arg: BootstrapArg
+  ): Promise<void> {
+    console.log("ConfigLoadManager starting");
   }
 }

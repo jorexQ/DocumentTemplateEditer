@@ -3,6 +3,11 @@ import { IocTool } from "../infrastructure/ioc-tool";
 import { getSingleIoc } from "./bootstrap-ioc";
 import { managerLoad } from "./bootstrap-ioc-load";
 import { BootstrapOptions, BootstrapContext } from "./bootstrap-context";
+import {
+  BootstrapEventBus,
+  BootstrapEventType,
+  BootstrapArg
+} from "./bootstrap-event-bus";
 
 /**
  *启动引导器
@@ -13,6 +18,7 @@ import { BootstrapOptions, BootstrapContext } from "./bootstrap-context";
 export class BootstrapCore {
   public readonly managerContainer: Container;
   public readonly context: BootstrapContext;
+  private _eventBus: BootstrapEventBus;
 
   /**
    * 引导器构造 会做的事:
@@ -28,7 +34,7 @@ export class BootstrapCore {
   }
 
   public getManagerContainer(iocTool: IocTool): Container {
-    managerLoad(iocTool, this.context);
+    this._eventBus = managerLoad(iocTool, this.context);
     return iocTool.container;
   }
 
@@ -49,7 +55,12 @@ export class BootstrapCore {
    *
    * @memberof Bootstrap
    */
-  private async preparing(): Promise<void> {}
+  private async preparing(): Promise<void> {
+    await this._eventBus.triggerHandler(
+      BootstrapEventType.preparing,
+      new BootstrapArg()
+    );
+  }
 
   /**
    * 启动初始化期 会做的事:
@@ -58,14 +69,24 @@ export class BootstrapCore {
    *
    * @memberof Bootstrap
    */
-  private async initializing(): Promise<void> {}
+  private async initializing(): Promise<void> {
+    await this._eventBus.triggerHandler(
+      BootstrapEventType.initializing,
+      new BootstrapArg()
+    );
+  }
 
   /**
    * 启动开始期
    *
    * @memberof Bootstrap
    */
-  private async starting(): Promise<void> {}
+  private async starting(): Promise<void> {
+    await this._eventBus.triggerHandler(
+      BootstrapEventType.starting,
+      new BootstrapArg()
+    );
+  }
 
   public async open(): Promise<void> {
     await this.preparing();

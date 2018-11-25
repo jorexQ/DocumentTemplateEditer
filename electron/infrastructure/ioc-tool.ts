@@ -1,25 +1,9 @@
-import { Container } from "inversify";
+import { Container, interfaces } from "inversify";
 import { nameof } from "../infrastructure/base-tool";
-
-type constructor<T> = new (...params: any[]) => T;
 
 export class IocTool {
   public readonly container: Container;
-
-  public RegisterSingletonClass<T>(constructor: constructor<T>): IocTool {
-    var typeName = nameof(constructor);
-    this.container
-      .bind<T>(typeName)
-      .to(constructor)
-      .inSingletonScope();
-    return this;
-  }
-
-  public RegisterConstantValue<T>(impl: T): IocTool {
-    var typeName = impl.constructor.name;
-    this.container.bind<T>(typeName).toConstantValue(impl);
-    return this;
-  }
+  private readonly _bindTypes: string[] = [];
 
   constructor() {
     this.container = new Container({
@@ -27,4 +11,27 @@ export class IocTool {
       defaultScope: "Singleton"
     });
   }
+
+  public registerSingletonClass<T>(
+    constructor: interfaces.Newable<T>
+  ): IocTool {
+    var typeName = nameof(constructor);
+    this._bindTypes.push(typeName);
+    this.container
+      .bind<T>(typeName)
+      .to(constructor)
+      .inSingletonScope();
+    return this;
+  }
+
+  public registerConstantValue<T>(impl: T): IocTool {
+    var typeName = impl.constructor.name;
+    this._bindTypes.push(typeName);
+    this.container.bind<T>(typeName).toConstantValue(impl);
+    return this;
+  }
+
+  // public resolveAll(): void {
+  //   this._bindTypes.forEach(typeName => this.container.get());
+  // }
 }
