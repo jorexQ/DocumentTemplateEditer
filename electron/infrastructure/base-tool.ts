@@ -25,6 +25,9 @@ export function isNullOrUnderfined(obj: any): obj is NullOrUnderfined {
 }
 
 export function nameof<T>(nameFunction: { new (...params: any[]): T }): string {
+  if(nameFunction.name){
+    return nameFunction.name;
+  }
   var fnStr = nameFunction.toString();
   // Class name (es6).
   // class MyClass { ... }
@@ -33,22 +36,26 @@ export function nameof<T>(nameFunction: { new (...params: any[]): T }): string {
   if (classIndex === 0) {
     var notMinified1 = fnStr.indexOf(" extends");
     if (notMinified1 > -1) {
-      return fnStr.substring(classString.length, notMinified1);
+      let name = fnStr.substring(classString.length, notMinified1);
+      return name;
     }
 
     var minified1 = fnStr.indexOf("extends");
     if (minified1 > -1) {
-      return fnStr.substring(classString.length, minified1);
+      let name = fnStr.substring(classString.length, minified1);
+      return name;
     }
 
     var notMinified = fnStr.indexOf(" {");
     if (notMinified > -1) {
-      return fnStr.substring(classString.length, notMinified);
+      let name = fnStr.substring(classString.length, notMinified);
+      return name;
     }
 
     var minified = fnStr.indexOf("{");
     if (minified > -1) {
-      return fnStr.substring(classString.length, minified);
+      let name = fnStr.substring(classString.length, minified);
+      return name;
     }
   }
 

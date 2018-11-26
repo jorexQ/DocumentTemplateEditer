@@ -7,6 +7,8 @@ const decorators = getDecorators(iocTool.container);
 
 export const lazyInject = decorators.lazyInject;
 
+export const lazyInjectNamed = decorators.lazyInjectNamed;
+
 export function getSingleIoc() {
   return iocTool;
 }

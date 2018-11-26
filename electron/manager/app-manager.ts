@@ -11,7 +11,7 @@ import {
   BootstrapEventBus,
   BootstrapArg
 } from "../bootstrap/bootstrap-event-bus";
-import { lazyInject } from "../bootstrap/bootstrap-ioc";
+import { lazyInject, lazyInjectNamed } from "../bootstrap/bootstrap-ioc";
 import { BootstrapContext } from "../bootstrap/bootstrap-context";
 import { EventHandler } from "../infrastructure/event-bus";
 import { app } from "electron";
@@ -65,6 +65,7 @@ export class AppManager extends BaseManager {
   }
 
   protected getBootstrapEventWrap(): BootstrapEventWrap {
+    let self = this;
     return {
       preparingHandle: async () => {
         return async function(this: BootstrapContext, arg: BootstrapArg) {
@@ -81,6 +82,7 @@ export class AppManager extends BaseManager {
       startingHandle: async () => {
         return async function(this: BootstrapContext, arg: BootstrapArg) {
           console.log("AppManager starting");
+          self.initAppBaseEvent();
           return;
         };
       }

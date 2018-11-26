@@ -7,34 +7,53 @@ import {
 } from "../bootstrap/bootstrap-event-bus";
 import { nameof } from "../Infrastructure/base-tool";
 import { BootstrapContext } from "../bootstrap/bootstrap-context";
-import { lazyInject } from "../bootstrap/bootstrap-ioc";
+import { lazyInjectNamed } from "../bootstrap/bootstrap-ioc";
 import { ConfigLoadManager } from "./config-load-manager";
 import { EventHandler } from "../infrastructure/event-bus";
+import { BaseWindowCtrl } from "../window/base-window-ctrl";
+
+import { default as windowCtrls } from "../window/window-ctrl-load";
+import { object } from "prop-types";
 
 export interface WindowStateOption {
   height: number;
   width: number;
   isMaximize: boolean;
+  defaultWindowName: string;
 }
 
 @injectable()
 export class WindowStateManager extends BaseManager {
   // public name: string;
-  private readonly _stateOption: WindowStateOption;
+  private _stateOption: WindowStateOption;
 
-  @lazyInject(nameof(ConfigLoadManager))
+  private windowCtrlImpls: BaseWindowCtrl[];
+  private defaultCtrl: BaseWindowCtrl | undefined;
+  private activeCtrl: BaseWindowCtrl | undefined;
+
+  @lazyInjectNamed(ConfigLoadManager, nameof(ConfigLoadManager))
   public configLoadManager: ConfigLoadManager;
 
   constructor(
     @inject(nameof(BootstrapEventBus)) bootstrapEventBus: BootstrapEventBus
   ) {
     super(bootstrapEventBus);
+    this._stateOption = {
+      width: 1280,
+      height: 720,
+      isMaximize: true,
+      defaultWindowName: "main"
+    };
   }
 
   protected getBootstrapEventWrap(): BootstrapEventWrap {
+    let self = this;
     return {
       preparingHandle: async () => {
         return async function(this: BootstrapContext, arg: BootstrapArg) {
+          //self.initByOption()
+          self.loadWindowCtrl();
+          self.initByOption();
           console.log("WindowStateManager preparing");
           return;
         };
@@ -54,14 +73,32 @@ export class WindowStateManager extends BaseManager {
     };
   }
 
-  public initByOption(option: WindowStateOption) {}
+  public initByOption(option?: WindowStateOption | undefined) {
+    let vaildOption = option ? option : {};
+    Object.assign(this._stateOption, vaildOption);
+    this.defaultCtrl = this.windowCtrlImpls.find(
+      x => x.getName() === this._stateOption.defaultWindowName
+    );
+  }
+
+  public loadWindowCtrl() {
+    this.windowCtrlImpls = windowCtrls.map(windowCtrl => {
+      return new windowCtrl();
+    });
+  }
 
   public createWindow(): (launchInfo: any) => void {
-    return () => null;
+    return (launchInfo: any) => {
+      if (!this.defaultCtrl) return;
+      this.defaultCtrl.openOrActive();
+    };
   }
 
   public activateWindow(): (event: Event, hasVisibleWindows: boolean) => void {
-    return () => null;
+    return (event: Event, hasVisibleWindows: boolean) => {
+      if (!this.defaultCtrl) return;
+      this.defaultCtrl.openOrActive();
+    };
   }
 
   public isWindowAllClosed(): boolean {

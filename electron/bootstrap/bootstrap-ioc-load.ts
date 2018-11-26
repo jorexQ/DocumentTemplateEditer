@@ -23,18 +23,28 @@ const managerClassArr = [
   <interfaces.Newable<VersionManager>>VersionManager
 ];
 
+type managerTypes =
+  | AppManager
+  | WindowStateManager
+  | IpcEventManager
+  | ChromeExtensionManager
+  | ConfigLoadManager
+  | PluginManager
+  | LocalFileManager
+  | VersionManager;
+
 export function managerLoad(
   iocTool: IocTool,
   bootstrapContext: BootstrapContext
 ) {
   let bootstrapEventBus = new BootstrapEventBus(bootstrapContext);
   iocTool.registerConstantValue(bootstrapEventBus);
-  managerClassArr.forEach(x=>{
-    iocTool.registerSingletonClass(<any>x);
+  managerClassArr.forEach(x => {
+    iocTool.registerSingletonClass<managerTypes>(x);
   });
 
   managerClassArr.forEach(x => {
-    let cons = iocTool.container.get(x);
+    let cons = iocTool.container.getNamed<managerTypes>(x.name, x.name);
   });
 
   return bootstrapEventBus;

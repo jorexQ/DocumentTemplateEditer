@@ -8,12 +8,12 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
 
-    "importHelpers": true,
+    //"importHelpers": true,
 
     "noImplicitAny": true,
     "strictNullChecks": true,
     //"strict": true,
-    "alwaysStrict": true,
+    //"alwaysStrict": true,
 
     //"noUnusedLocals": true,
     //"noUnusedParameters": true,
