@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { injectable, inject } from "inversify";
-import { BaseManager } from "../bootstrap/base-manager";
+import { BaseManager, BootstrapEventWrap } from "../bootstrap/base-manager";
 import {
   BootstrapEventBus,
   BootstrapArg
@@ -31,34 +31,40 @@ export class WindowStateManager extends BaseManager {
     super(bootstrapEventBus);
   }
 
-  protected async preparingHandle(): Promise<
-    EventHandler<BootstrapContext, BootstrapArg>
-  > {
-    return async function(this: BootstrapContext, arg: BootstrapArg) {
-      console.log("ConfigLoadManager preparing");
-      return;
-    };
-  }
-
-  protected async initializingHandle(): Promise<
-    EventHandler<BootstrapContext, BootstrapArg>
-  > {
-    return async function(this: BootstrapContext, arg: BootstrapArg) {
-      console.log("ConfigLoadManager initializing");
-      return;
-    };
-  }
-
-  protected async startingHandle(): Promise<
-    EventHandler<BootstrapContext, BootstrapArg>
-  > {
-    return async function(this: BootstrapContext, arg: BootstrapArg) {
-      console.log("ConfigLoadManager starting");
-      return;
+  protected getBootstrapEventWrap(): BootstrapEventWrap {
+    return {
+      preparingHandle: async () => {
+        return async function(this: BootstrapContext, arg: BootstrapArg) {
+          console.log("WindowStateManager preparing");
+          return;
+        };
+      },
+      initializingHandle: async () => {
+        return async function(this: BootstrapContext, arg: BootstrapArg) {
+          console.log("WindowStateManager initializing");
+          return;
+        };
+      },
+      startingHandle: async () => {
+        return async function(this: BootstrapContext, arg: BootstrapArg) {
+          console.log("WindowStateManager starting");
+          return;
+        };
+      }
     };
   }
 
   public initByOption(option: WindowStateOption) {}
 
-  public refreshByOption(option: WindowStateOption) {}
+  public createWindow(): (launchInfo: any) => void {
+    return () => null;
+  }
+
+  public activateWindow(): (event: Event, hasVisibleWindows: boolean) => void {
+    return () => null;
+  }
+
+  public isWindowAllClosed(): boolean {
+    return true;
+  }
 }

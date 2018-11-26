@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { injectable, inject } from "inversify";
-import { BaseManager } from "../bootstrap/base-manager";
+import { BaseManager, BootstrapEventWrap } from "../bootstrap/base-manager";
 import { nameof } from "../Infrastructure/base-tool";
 import {
   BootstrapEventBus,
@@ -17,30 +17,31 @@ export class IpcEventManager extends BaseManager {
     super(bootstrapEventBus);
   }
 
-  protected async preparingHandle(): Promise<
-    EventHandler<BootstrapContext, BootstrapArg>
-  > {
-    return async function(this: BootstrapContext, arg: BootstrapArg) {
-      console.log("IpcEventManager preparing");
-      return;
-    };
-  }
 
-  protected async initializingHandle(): Promise<
-    EventHandler<BootstrapContext, BootstrapArg>
-  > {
-    return async function(this: BootstrapContext, arg: BootstrapArg) {
-      console.log("IpcEventManager initializing");
-      return;
-    };
-  }
+  protected getBootstrapEventWrap (): BootstrapEventWrap {
+    
+    return {
+      preparingHandle: async ()=>{
 
-  protected async startingHandle(): Promise<
-    EventHandler<BootstrapContext, BootstrapArg>
-  > {
-    return async function(this: BootstrapContext, arg: BootstrapArg) {
-      console.log("IpcEventManager starting");
-      return;
-    };
+        return async function(this: BootstrapContext, arg: BootstrapArg) {
+          console.log("IpcEventManager preparing");
+          return;
+        };
+      },
+      initializingHandle: async ()=>{
+
+        return async function(this: BootstrapContext, arg: BootstrapArg) {
+          console.log("IpcEventManager initializing");
+          return;
+        };
+      },
+      startingHandle: async ()=>{
+
+        return async function(this: BootstrapContext, arg: BootstrapArg) {
+          console.log("IpcEventManager starting");
+          return;
+        };
+      }
+    }
   }
 }

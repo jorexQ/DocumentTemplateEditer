@@ -6,7 +6,7 @@ import { IpcEventManager } from "./ipc-event-manager";
 import { ChromeExtensionManager } from "./chrome-extension-manager";
 import { ConfigLoadManager, GetOptionMethod } from "./config-load-manager";
 import { PluginManager } from "./plugin-manager";
-import { BaseManager } from "../bootstrap/base-manager";
+import { BaseManager, BootstrapEventWrap } from "../bootstrap/base-manager";
 import {
   BootstrapEventBus,
   BootstrapArg
@@ -14,6 +14,7 @@ import {
 import { lazyInject } from "../bootstrap/bootstrap-ioc";
 import { BootstrapContext } from "../bootstrap/bootstrap-context";
 import { EventHandler } from "../infrastructure/event-bus";
+import { app } from "electron";
 
 export interface AppOption {
   pluginDirectory?: string;
@@ -62,32 +63,39 @@ export class AppManager extends BaseManager {
     //   currentAppOption => Object.assign(defatulOptoin, currentAppOption)
     // );
   }
-  
 
-  protected async preparingHandle(): Promise<
-    EventHandler<BootstrapContext, BootstrapArg>
-  > {
-    return async function(this: BootstrapContext, arg: BootstrapArg) {
-      console.log("AppManager preparing");
-      return;
+  protected getBootstrapEventWrap(): BootstrapEventWrap {
+    return {
+      preparingHandle: async () => {
+        return async function(this: BootstrapContext, arg: BootstrapArg) {
+          console.log("AppManager preparing");
+          return;
+        };
+      },
+      initializingHandle: async () => {
+        return async function(this: BootstrapContext, arg: BootstrapArg) {
+          console.log("AppManager initializing");
+          return;
+        };
+      },
+      startingHandle: async () => {
+        return async function(this: BootstrapContext, arg: BootstrapArg) {
+          console.log("AppManager starting");
+          return;
+        };
+      }
     };
   }
 
-  protected async initializingHandle(): Promise<
-    EventHandler<BootstrapContext, BootstrapArg>
-  > {
-    return async function(this: BootstrapContext, arg: BootstrapArg) {
-      console.log("AppManager initializing");
-      return;
-    };
-  }
+  private initAppBaseEvent() {
+    app.on("ready", this.windowStateManager.createWindow());
 
-  protected async startingHandle(): Promise<
-    EventHandler<BootstrapContext, BootstrapArg>
-  > {
-    return async function(this: BootstrapContext, arg: BootstrapArg) {
-      console.log("AppManager starting");
-      return;
-    };
+    app.on("activate", this.windowStateManager.activateWindow());
+
+    app.on("window-all-closed", () => {
+      if (this.windowStateManager.isWindowAllClosed()) {
+        app.quit();
+      }
+    });
   }
 }

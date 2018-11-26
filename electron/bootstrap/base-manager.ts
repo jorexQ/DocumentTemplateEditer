@@ -8,6 +8,37 @@ import {
 import { EventHandler } from "../infrastructure/event-bus";
 import { BootstrapContext } from "./bootstrap-context";
 
+export interface BootstrapEventWrap {
+  /**
+   *启动准备期 会做的事:
+   * 1.加载各个管理器的本地配置文件和相关的功能配置。
+   * 2.
+   *
+   * @returns {Promise<EventHandler<BootstrapContext, BootstrapArg>>}
+   * @memberof BootstrapEventWrap
+   */
+  preparingHandle(): Promise<EventHandler<BootstrapContext, BootstrapArg>>;
+
+
+  /**
+   * 启动初始化期 会做的事:
+   * 1.初始化各个管理器相关的事件和功能。
+   * 2.
+   *
+   * @returns {Promise<EventHandler<BootstrapContext, BootstrapArg>>}
+   * @memberof BootstrapEventWrap
+   */
+  initializingHandle(): Promise<EventHandler<BootstrapContext, BootstrapArg>>;
+
+  /**
+   * 启动开始期
+   *
+   * @returns {Promise<EventHandler<BootstrapContext, BootstrapArg>>}
+   * @memberof BootstrapEventWrap
+   */
+  startingHandle(): Promise<EventHandler<BootstrapContext, BootstrapArg>>;
+}
+
 @injectable()
 export abstract class BaseManager {
   protected readonly bootstrapEventBus: BootstrapEventBus;
@@ -16,33 +47,27 @@ export abstract class BaseManager {
     @inject(nameof(BootstrapEventBus)) bootstrapEventBus: BootstrapEventBus
   ) {
     this.bootstrapEventBus = bootstrapEventBus;
-    let self = this;
 
-    bootstrapEventBus.awaitRegisterHandler(
-      BootstrapEventType.preparing,
-      this.preparingHandle()
-    );
-
-    bootstrapEventBus.awaitRegisterHandler(
-      BootstrapEventType.initializing,
-      this.initializingHandle()
-    );
-
-    bootstrapEventBus.awaitRegisterHandler(
-      BootstrapEventType.starting,
-      this.startingHandle()
-    );
+    this.registerBootstrapEvent();
   }
 
-  protected abstract async initializingHandle(): Promise<
-    EventHandler<BootstrapContext, BootstrapArg>
-  >;
+  protected abstract getBootstrapEventWrap(): BootstrapEventWrap;
 
-  protected abstract async preparingHandle(): Promise<
-    EventHandler<BootstrapContext, BootstrapArg>
-  >;
+  private registerBootstrapEvent(): void {
+    let eventWrap = this.getBootstrapEventWrap();
+    this.bootstrapEventBus.awaitRegisterHandler(
+      BootstrapEventType.preparing,
+      eventWrap.preparingHandle()
+    );
 
-  protected abstract async startingHandle(): Promise<
-    EventHandler<BootstrapContext, BootstrapArg>
-  >;
+    this.bootstrapEventBus.awaitRegisterHandler(
+      BootstrapEventType.initializing,
+      eventWrap.initializingHandle()
+    );
+
+    this.bootstrapEventBus.awaitRegisterHandler(
+      BootstrapEventType.starting,
+      eventWrap.startingHandle()
+    );
+  }
 }

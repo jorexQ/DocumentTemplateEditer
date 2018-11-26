@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { injectable, inject } from "inversify";
 import { nameof } from "../infrastructure/base-tool";
-import { BaseManager } from "../bootstrap/base-manager";
+import { BaseManager, BootstrapEventWrap } from "../bootstrap/base-manager";
 import {
   BootstrapEventBus,
   BootstrapArg
@@ -26,30 +26,31 @@ export class ChromeExtensionManager extends BaseManager {
     super(bootstrapEventBus);
   }
 
-  protected async preparingHandle(): Promise<
-    EventHandler<BootstrapContext, BootstrapArg>
-  > {
-    return async function(this: BootstrapContext, arg: BootstrapArg) {
-      console.log("ChromeExtensionManager preparing");
-      return;
-    };
-  }
-  
-  protected async initializingHandle(): Promise<
-    EventHandler<BootstrapContext, BootstrapArg>
-  > {
-    return async function(this: BootstrapContext, arg: BootstrapArg) {
-      console.log("ChromeExtensionManager initializing");
-      return;
-    };
+  protected getBootstrapEventWrap (): BootstrapEventWrap {
+    
+    return {
+      preparingHandle: async ()=>{
+
+        return async function(this: BootstrapContext, arg: BootstrapArg) {
+          console.log("ChromeExtensionManager preparing");
+          return;
+        };
+      },
+      initializingHandle: async ()=>{
+
+        return async function(this: BootstrapContext, arg: BootstrapArg) {
+          console.log("ChromeExtensionManager initializing");
+          return;
+        };
+      },
+      startingHandle: async ()=>{
+
+        return async function(this: BootstrapContext, arg: BootstrapArg) {
+          console.log("ChromeExtensionManager starting");
+          return;
+        };
+      }
+    }
   }
 
-  protected async startingHandle(): Promise<
-    EventHandler<BootstrapContext, BootstrapArg>
-  > {
-    return async function(this: BootstrapContext, arg: BootstrapArg) {
-      console.log("ChromeExtensionManager starting");
-      return;
-    };
-  }
 }

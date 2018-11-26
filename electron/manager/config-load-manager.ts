@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { injectable, inject } from "inversify";
 
 import { nameof } from "../infrastructure/base-tool";
-import { BaseManager } from "../bootstrap/base-manager";
+import { BaseManager, BootstrapEventWrap } from "../bootstrap/base-manager";
 import {
   BootstrapEventBus,
   BootstrapArg
@@ -83,30 +83,30 @@ export class ConfigLoadManager extends BaseManager {
     return new Promise<GetOptionMethod<T>>(function() {});
   }
 
-  protected async preparingHandle(): Promise<
-    EventHandler<BootstrapContext, BootstrapArg>
-  > {
-    return async function(this: BootstrapContext, arg: BootstrapArg) {
-      console.log("ConfigLoadManager preparing");
-      return;
-    };
-  }
+  protected getBootstrapEventWrap (): BootstrapEventWrap {
+    
+    return {
+      preparingHandle: async ()=>{
 
-  protected async initializingHandle(): Promise<
-    EventHandler<BootstrapContext, BootstrapArg>
-  > {
-    return async function(this: BootstrapContext, arg: BootstrapArg) {
-      console.log("ConfigLoadManager initializing");
-      return;
-    };
-  }
+        return async function(this: BootstrapContext, arg: BootstrapArg) {
+          console.log("ConfigLoadManager preparing");
+          return;
+        };
+      },
+      initializingHandle: async ()=>{
 
-  protected async startingHandle(): Promise<
-    EventHandler<BootstrapContext, BootstrapArg>
-  > {
-    return async function(this: BootstrapContext, arg: BootstrapArg) {
-      console.log("ConfigLoadManager starting");
-      return;
-    };
+        return async function(this: BootstrapContext, arg: BootstrapArg) {
+          console.log("ConfigLoadManager initializing");
+          return;
+        };
+      },
+      startingHandle: async ()=>{
+
+        return async function(this: BootstrapContext, arg: BootstrapArg) {
+          console.log("ConfigLoadManager starting");
+          return;
+        };
+      }
+    }
   }
 }
