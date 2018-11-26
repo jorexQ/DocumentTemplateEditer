@@ -89,6 +89,7 @@ export class BootstrapCore {
   }
 
   public async open(): Promise<void> {
+    await this._eventBus.starRegisterHandler();
     await this.preparing();
     await this.initializing();
     await this.starting();

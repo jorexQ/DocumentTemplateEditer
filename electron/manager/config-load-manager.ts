@@ -3,10 +3,14 @@ import { injectable, inject } from "inversify";
 
 import { nameof } from "../infrastructure/base-tool";
 import { BaseManager } from "../bootstrap/base-manager";
-import { BootstrapEventBus, BootstrapArg } from "../bootstrap/bootstrap-event-bus";
+import {
+  BootstrapEventBus,
+  BootstrapArg
+} from "../bootstrap/bootstrap-event-bus";
 import { Storage } from "../infrastructure/types";
 import { StorageFile } from "../Infrastructure/storage-file";
 import { BootstrapContext } from "../bootstrap/bootstrap-context";
+import { EventHandler } from "../infrastructure/event-bus";
 
 //
 export type CustomConvertMethod<T> = (result: T) => T;
@@ -25,28 +29,28 @@ export type GetOptionMethod<T> = <T extends {}>(
  * @param {CustomConvertMethod<T>} [customConvertMethod]
  * @returns {T}
  */
-function getOption<T extends {}>(
-  rootKey: string,
-  customConvertMethod?: CustomConvertMethod<T>
-): T {
-  if (!customConvertMethod) {
-    customConvertMethod = result => {
-      return result;
-    };
-  }
+// function getOption<T extends {}>(
+//   rootKey: string,
+//   customConvertMethod?: CustomConvertMethod<T>
+// ): T {
+//   if (!customConvertMethod) {
+//     customConvertMethod = result => {
+//       return result;
+//     };
+//   }
 
-  if (!this.configJsonContent) {
-    return customConvertMethod(<T>{});
-  }
+//   if (!this.configJsonContent) {
+//     return customConvertMethod(<T>{});
+//   }
 
-  var currentValue = this.configJsonContent[rootKey];
+//   var currentValue = this.configJsonContent[rootKey];
 
-  if (currentValue) {
-    return customConvertMethod(currentValue);
-  } else {
-    return customConvertMethod(<T>{});
-  }
-}
+//   if (currentValue) {
+//     return customConvertMethod(currentValue);
+//   } else {
+//     return customConvertMethod(<T>{});
+//   }
+// }
 
 /**
  *
@@ -78,25 +82,31 @@ export class ConfigLoadManager extends BaseManager {
 
     return new Promise<GetOptionMethod<T>>(function() {});
   }
-  
-  protected async initializingHandle(
-    this: BootstrapContext,
-    arg: BootstrapArg
-  ): Promise<void> {
-    console.log("ConfigLoadManager initializing");
+
+  protected async preparingHandle(): Promise<
+    EventHandler<BootstrapContext, BootstrapArg>
+  > {
+    return async function(this: BootstrapContext, arg: BootstrapArg) {
+      console.log("ConfigLoadManager preparing");
+      return;
+    };
   }
 
-  protected async preparingHandle(
-    this: BootstrapContext,
-    arg: BootstrapArg
-  ): Promise<void> {
-    console.log("ConfigLoadManager preparing");
+  protected async initializingHandle(): Promise<
+    EventHandler<BootstrapContext, BootstrapArg>
+  > {
+    return async function(this: BootstrapContext, arg: BootstrapArg) {
+      console.log("ConfigLoadManager initializing");
+      return;
+    };
   }
 
-  protected async startingHandle(
-    this: BootstrapContext,
-    arg: BootstrapArg
-  ): Promise<void> {
-    console.log("ConfigLoadManager starting");
+  protected async startingHandle(): Promise<
+    EventHandler<BootstrapContext, BootstrapArg>
+  > {
+    return async function(this: BootstrapContext, arg: BootstrapArg) {
+      console.log("ConfigLoadManager starting");
+      return;
+    };
   }
 }

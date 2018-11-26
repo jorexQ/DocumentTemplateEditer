@@ -9,11 +9,11 @@ import { PluginManager } from "./plugin-manager";
 import { BaseManager } from "../bootstrap/base-manager";
 import {
   BootstrapEventBus,
-  BootstrapEventType,
   BootstrapArg
 } from "../bootstrap/bootstrap-event-bus";
 import { lazyInject } from "../bootstrap/bootstrap-ioc";
 import { BootstrapContext } from "../bootstrap/bootstrap-context";
+import { EventHandler } from "../infrastructure/event-bus";
 
 export interface AppOption {
   pluginDirectory?: string;
@@ -62,25 +62,32 @@ export class AppManager extends BaseManager {
     //   currentAppOption => Object.assign(defatulOptoin, currentAppOption)
     // );
   }
+  
 
-  protected async initializingHandle(
-    this: BootstrapContext,
-    arg: BootstrapArg
-  ): Promise<void> {
-    console.log("AppManager initializing");
+  protected async preparingHandle(): Promise<
+    EventHandler<BootstrapContext, BootstrapArg>
+  > {
+    return async function(this: BootstrapContext, arg: BootstrapArg) {
+      console.log("AppManager preparing");
+      return;
+    };
   }
 
-  protected async preparingHandle(
-    this: BootstrapContext,
-    arg: BootstrapArg
-  ): Promise<void> {
-    console.log("AppManager preparing");
+  protected async initializingHandle(): Promise<
+    EventHandler<BootstrapContext, BootstrapArg>
+  > {
+    return async function(this: BootstrapContext, arg: BootstrapArg) {
+      console.log("AppManager initializing");
+      return;
+    };
   }
 
-  protected async startingHandle(
-    this: BootstrapContext,
-    arg: BootstrapArg
-  ): Promise<void> {
-    console.log("AppManager starting");
+  protected async startingHandle(): Promise<
+    EventHandler<BootstrapContext, BootstrapArg>
+  > {
+    return async function(this: BootstrapContext, arg: BootstrapArg) {
+      console.log("AppManager starting");
+      return;
+    };
   }
 }

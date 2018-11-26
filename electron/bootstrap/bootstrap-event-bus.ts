@@ -3,6 +3,7 @@ import { EventBus } from "../infrastructure/event-bus";
 import { injectable } from "inversify";
 import { EventHandler } from "../infrastructure/event-bus";
 import { BootstrapContext } from "./bootstrap-context";
+import { __await } from "tslib";
 
 export enum BootstrapEventType {
   preparing = "preparing",
@@ -17,6 +18,7 @@ export class BootstrapEventBus extends EventBus<
   BootstrapArg
 > {
   private readonly context: BootstrapContext;
+  private readonly awaitRegisterQueue: (() => Promise<void>)[] = [];
 
   constructor(context: BootstrapContext) {
     super();
@@ -28,6 +30,24 @@ export class BootstrapEventBus extends EventBus<
     eventHandler: EventHandler<BootstrapContext, BootstrapArg>
   ) {
     this.register(this.context, eventName, eventHandler);
+  }
+
+  public awaitRegisterHandler(
+    eventName: BootstrapEventType,
+    eventHandlerPromise: Promise<EventHandler<BootstrapContext, BootstrapArg>>
+  ) {
+    let self = this;
+    this.awaitRegisterQueue.push(async function() {
+      self.register(self.context, eventName, await eventHandlerPromise);
+    });
+  }
+
+  public async starRegisterHandler() {
+    if (this.awaitRegisterQueue.length) {
+      let promiseArr = this.awaitRegisterQueue.map(x => x());
+      this.awaitRegisterQueue.splice(0, this.awaitRegisterQueue.length);
+      return Promise.all(promiseArr);
+    }
   }
 
   public async triggerHandler(

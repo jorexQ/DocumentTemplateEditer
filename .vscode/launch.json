@@ -35,7 +35,7 @@
       "program": "${workspaceRoot}\\electron\\startup.ts",
       "internalConsoleOptions": "openOnSessionStart",
       "sourceMaps": true,
-      "smartStep": false,
+      "smartStep": true,
       "outFiles": ["${workspaceRoot}/electron/**/*.js"]
     },
     {

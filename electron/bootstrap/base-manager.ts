@@ -17,36 +17,32 @@ export abstract class BaseManager {
   ) {
     this.bootstrapEventBus = bootstrapEventBus;
     let self = this;
-    bootstrapEventBus.registerHandler(
-      BootstrapEventType.initializing,
-      async function(this: BootstrapContext, arg: BootstrapArg) {
-        await self.initializingHandle.call(this,BootstrapArg);
-      }
-    );
 
-    bootstrapEventBus.registerHandler(
+    bootstrapEventBus.awaitRegisterHandler(
       BootstrapEventType.preparing,
-      this.preparingHandle
+      this.preparingHandle()
     );
 
-    bootstrapEventBus.registerHandler(
+    bootstrapEventBus.awaitRegisterHandler(
+      BootstrapEventType.initializing,
+      this.initializingHandle()
+    );
+
+    bootstrapEventBus.awaitRegisterHandler(
       BootstrapEventType.starting,
-      this.startingHandle
+      this.startingHandle()
     );
   }
 
-  protected abstract async initializingHandle(
-    this: BootstrapContext,
-    arg: BootstrapArg
-  ): Promise<void>
+  protected abstract async initializingHandle(): Promise<
+    EventHandler<BootstrapContext, BootstrapArg>
+  >;
 
-  protected abstract async preparingHandle(
-    this: BootstrapContext,
-    arg: BootstrapArg
-  ): Promise<void> 
+  protected abstract async preparingHandle(): Promise<
+    EventHandler<BootstrapContext, BootstrapArg>
+  >;
 
-  protected abstract async startingHandle(
-    this: BootstrapContext,
-    arg: BootstrapArg
-  ): Promise<void>
+  protected abstract async startingHandle(): Promise<
+    EventHandler<BootstrapContext, BootstrapArg>
+  >;
 }
