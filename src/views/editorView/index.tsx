@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Layout } from 'antd';
-import { HeaderBar } from '../components/editor-layout/HeaderBar';
-import { FooterBar } from '../components/editor-layout/FooterBar';
-import { LeftBar } from '../components/editor-layout/LeftBar';
-import { RightBar } from '../components/editor-layout/RightBar';
-import { MainWorkArea } from '../components/editor-layout/MainWorkArea';
+import { HeaderBar } from '../../components/editor-layout/HeaderBar';
+import { FooterBar } from '../../components/editor-layout/FooterBar';
+import { LeftBar } from '../../components/editor-layout/LeftBar';
+import { RightBar } from '../../components/editor-layout/RightBar';
+import { MainWorkArea } from '../../components/editor-layout/MainWorkArea';
 
 interface EditorViewProps { };
 

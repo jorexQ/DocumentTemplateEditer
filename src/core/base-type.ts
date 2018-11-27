@@ -15,7 +15,11 @@ interface BaseComponent {
   dependencyComponent: string[];
   key: string;
   name: string;
-  action: any;
-  store: any;
+  action: BaseAction;
+  store: BaseStore;
   class: any;
 }
+
+export interface BaseAction {}
+
+export interface BaseStore {}
