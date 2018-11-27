@@ -14,6 +14,7 @@ import { BaseWindowCtrl } from "../window/base-window-ctrl";
 
 import { default as windowCtrls } from "../window/window-ctrl-load";
 import { object } from "prop-types";
+import electronDebug = require("electron-debug");
 
 export interface WindowStateOption {
   height: number;
@@ -90,7 +91,9 @@ export class WindowStateManager extends BaseManager {
   public createWindow(): (launchInfo: any) => void {
     return (launchInfo: any) => {
       if (!this.defaultCtrl) return;
+      electronDebug({ showDevTools: true, enabled: true });
       this.defaultCtrl.openOrActive();
+      require('devtron').install();
     };
   }
 

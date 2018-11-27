@@ -17,7 +17,7 @@ export class MainWindowCtrl extends BaseWindowCtrl {
 
   public getViewHtmlUri(): string {
     return url.format({
-      pathname: path.join(__dirname, "main-window-ctrl.html"),
+      pathname: path.join(__dirname, "main-window.html"),
       protocol: "file",
       slashes: true
     });
@@ -32,8 +32,9 @@ export class MainWindowCtrl extends BaseWindowCtrl {
         maximizable: true,
         title: "electron demo"
       });
-      currentWin.setMenu(null);
-      currentWin.loadURL(this.getViewHtmlUri());
+      //currentWin.setMenu(null);
+      let formatUri = this.getViewHtmlUri();
+      currentWin.loadURL(formatUri);
       this.win = currentWin;
       this.initEvent();
     } else {

@@ -8,6 +8,7 @@ import {
 } from "../bootstrap/bootstrap-event-bus";
 import { BootstrapContext } from "../bootstrap/bootstrap-context";
 import { EventHandler } from "../infrastructure/event-bus";
+import electronDebug from "electron-debug";
 
 export type ChromeExtensionOptionItem = {
   tokenKey: string;
