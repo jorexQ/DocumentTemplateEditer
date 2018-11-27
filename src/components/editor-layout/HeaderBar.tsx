@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Layout} from 'antd';
 const {Header} = Layout;
 
-import '../../assist/styles/editer-layout/header-bar.scss';
+import '../../assist/styles/editor-layout/header-bar.scss';
 
 interface HeaderBarProps {
     height : number

@@ -1,21 +1,21 @@
 import * as React from 'react';
 import { Layout } from 'antd';
-import { HeaderBar } from '../components/editer-layout/HeaderBar';
-import { FooterBar } from '../components/editer-layout/FooterBar';
-import { LeftBar } from '../components/editer-layout/LeftBar';
-import { RightBar } from '../components/editer-layout/RightBar';
-import { MainWorkArea } from '../components/editer-layout/MainWorkArea';
+import { HeaderBar } from '../components/editor-layout/HeaderBar';
+import { FooterBar } from '../components/editor-layout/FooterBar';
+import { LeftBar } from '../components/editor-layout/LeftBar';
+import { RightBar } from '../components/editor-layout/RightBar';
+import { MainWorkArea } from '../components/editor-layout/MainWorkArea';
 
-interface EditerViewProps { };
+interface EditorViewProps { };
 
-interface EditerViewState {
+interface EditorViewState {
     headerHeight: number,
     footerHeight: number
 };
 
-export class EditerView extends React.Component<EditerViewProps, EditerViewState> {
+export class EditorView extends React.Component<EditorViewProps, EditorViewState> {
 
-    constructor(props: EditerViewProps) {
+    constructor(props: EditorViewProps) {
         super(props);
 
         this.state = {

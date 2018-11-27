@@ -1,1 +1,1 @@
-# DocumentTemplateEditer
+# DocumentTemplateEditor

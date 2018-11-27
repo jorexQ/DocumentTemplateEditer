@@ -1,5 +1,5 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import { EditerView } from "./views/EditerView";
+import { EditorView } from "./views/EditorView";
 
-ReactDOM.render(<EditerView />, document.getElementById("main"));
+ReactDOM.render(<EditorView />, document.getElementById("main"));

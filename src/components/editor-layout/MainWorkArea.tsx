@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Layout } from 'antd';
 const { Content } = Layout;
 
-import '../../assist/styles/editer-layout/main-work-area.scss';
+import '../../assist/styles/editor-layout/main-work-area.scss';
 
 interface MainWorkAreaProps {
     headerHeight?: number,

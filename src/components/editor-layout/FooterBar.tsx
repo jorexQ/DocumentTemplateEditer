@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Layout} from 'antd';
 const {Footer} = Layout;
 
-import '../../assist/styles/editer-layout/footer-bar.scss';
+import '../../assist/styles/editor-layout/footer-bar.scss';
 
 interface FooterBarProps {
     height:number
