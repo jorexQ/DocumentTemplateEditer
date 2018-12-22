@@ -90,16 +90,23 @@ export class RWLock {
    * @returns {RWLock}
    * @memberof RWLock
    */
-  public static getCurrent(key: string = ""): Undefinedable<RWLock> {
+  public static getCurrent(key: string = ""): RWLock {
     if (key === "") return this._defaultInstance;
+    let instance: RWLock;
 
-    if (this._mapInstance.has(key)) return this._mapInstance.get(key);
-
-    let keyRWLock: RWLock = new RWLock();
-
-    this._mapInstance.set(key, keyRWLock);
-
-    return keyRWLock;
+    if (this._mapInstance.has(key)) {
+      let tempInstance = this._mapInstance.get(key);
+      if (!tempInstance) {
+        instance = new RWLock();
+        this._mapInstance.set(key, instance);
+      } else {
+        instance = tempInstance;
+      }
+    } else {
+      instance = new RWLock();
+      this._mapInstance.set(key, instance);
+    }
+    return instance;
   }
 
   /**

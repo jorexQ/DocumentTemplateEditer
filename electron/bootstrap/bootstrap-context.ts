@@ -1,15 +1,12 @@
 export class BootstrapContext {
-  public readonly startHtmlUrl: string;
-  public readonly startOptionUrl: string;
+  public readonly startOptionFile: string;
 
   constructor(options: BootstrapOptions) {
     if (!options) return;
-    this.startHtmlUrl = options.startHtmlUrl;
-    this.startOptionUrl = options.startOptionUrl;
+    this.startOptionFile = options.startOptionFile;
   }
 }
 
 export interface BootstrapOptions {
-  startHtmlUrl: string;
-  startOptionUrl: string;
+  startOptionFile: string;
 }

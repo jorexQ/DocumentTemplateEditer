@@ -19,7 +19,7 @@ export class EditorView extends React.Component<EditorViewProps, EditorViewState
         super(props);
 
         this.state = {
-            headerHeight: 34,
+            headerHeight: 64,
             footerHeight: 70
         }
     }

@@ -60,7 +60,8 @@ export type GetOptionMethod<T> = <T extends {}>(
  */
 @injectable()
 export class ConfigLoadManager extends BaseManager {
-  private readonly configRootPath: string = "";
+  private _configFile: string = "";
+  private _configStorage: StorageFile;
   constructor(
     @inject(nameof(BootstrapEventBus)) bootstrapEventBus: BootstrapEventBus
   ) {
@@ -83,30 +84,30 @@ export class ConfigLoadManager extends BaseManager {
     return new Promise<GetOptionMethod<T>>(function() {});
   }
 
-  protected getBootstrapEventWrap (): BootstrapEventWrap {
-    
+  protected getBootstrapEventWrap(): BootstrapEventWrap {
+    let self = this;
     return {
-      preparingHandle: async ()=>{
-
+      preparingHandle: async () => {
         return async function(this: BootstrapContext, arg: BootstrapArg) {
           console.log("ConfigLoadManager preparing");
+          self._configFile = this.startOptionFile;
+          self._configStorage = new StorageFile(self._configFile);
+          self._configStorage.asyncGet
           return;
         };
       },
-      initializingHandle: async ()=>{
-
+      initializingHandle: async () => {
         return async function(this: BootstrapContext, arg: BootstrapArg) {
           console.log("ConfigLoadManager initializing");
           return;
         };
       },
-      startingHandle: async ()=>{
-
+      startingHandle: async () => {
         return async function(this: BootstrapContext, arg: BootstrapArg) {
           console.log("ConfigLoadManager starting");
           return;
         };
       }
-    }
+    };
   }
 }

@@ -42,8 +42,7 @@ export class BootstrapCore {
     bootstrapOptions: BootstrapOptions | undefined
   ): BootstrapContext {
     let options = bootstrapOptions || {
-      startHtmlUrl: "",
-      startOptionUrl: ""
+      startOptionFile: ""
     };
     return new BootstrapContext(options);
   }

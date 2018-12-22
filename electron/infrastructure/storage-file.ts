@@ -22,15 +22,13 @@ export class StorageFile implements Storage {
     this._filePath = filePath;
   }
 
-  private async asyncGetFileContent(): Promise<{}> {
+  private async asyncGetFileContent(): Promise<Buffer> {
     let rwLock = RWLock.getCurrent();
-    let option: LockOptions<null, Promise<{}>> = {
+    let option: LockOptions<null, Promise<Buffer>> = {
       callBack: () =>
-        new Promise<{}>((resolve, reject) => {
+        new Promise<Buffer>((resolve, reject) => {
           fs.readFile(this._filePath, (ex, data) => {
-            let contentStr = data.toString();
-            let obj = JSON.parse(contentStr) as {};
-            resolve(obj);
+            resolve(data);
           });
         }),
       scope: null,
@@ -38,15 +36,19 @@ export class StorageFile implements Storage {
       timeoutCallBack: () => null
     };
 
-    if (rwLock) {
-      return await rwLock.asyncRead(option);
-    } else {
-      return {};
-    }
+    return await rwLock.asyncRead(option);
   }
 
-  private getFileContent(): {} {
-    return {};
+  private getFileContent(): Buffer {
+    let rwLock = RWLock.getCurrent();
+    let option: LockOptions<null, Buffer> = {
+      callBack: () => fs.readFileSync(this._filePath),
+      scope: null,
+      timeout: 20000,
+      timeoutCallBack: () => null
+    };
+
+    return rwLock.syncRead(option);
   }
 
   private setFileContent() {}

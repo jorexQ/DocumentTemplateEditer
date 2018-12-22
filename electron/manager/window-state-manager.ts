@@ -21,6 +21,7 @@ export interface WindowStateOption {
   width: number;
   isMaximize: boolean;
   defaultWindowName: string;
+  mainHtmlUrl?: string;
 }
 
 @injectable()
@@ -39,6 +40,9 @@ export class WindowStateManager extends BaseManager {
     @inject(nameof(BootstrapEventBus)) bootstrapEventBus: BootstrapEventBus
   ) {
     super(bootstrapEventBus);
+    this.configLoadManager
+
+
     this._stateOption = {
       width: 1280,
       height: 720,
@@ -93,7 +97,7 @@ export class WindowStateManager extends BaseManager {
       if (!this.defaultCtrl) return;
       electronDebug({ showDevTools: true, enabled: true });
       this.defaultCtrl.openOrActive();
-      require('devtron').install();
+      require("devtron").install();
     };
   }
 
