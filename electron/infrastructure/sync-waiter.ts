@@ -8,11 +8,11 @@ import { Nullable } from "./types";
  */
 export class SyncWaiter {
   private readonly _timeout: number;
-  private readonly _whenMehod: () => boolean;
+  private readonly _whenMethod: () => boolean;
 
-  constructor(timeout: number, whenMehod: () => boolean) {
+  constructor(timeout: number, whenMethod: () => boolean) {
     this._timeout = timeout;
-    this._whenMehod = whenMehod;
+    this._whenMethod = whenMethod;
   }
 
   /**
@@ -34,7 +34,7 @@ export class SyncWaiter {
     }, 1);
 
     do {
-      isDone = this._whenMehod();
+      isDone = this._whenMethod();
     } while (!isDone && !isTimeout);
 
     if (clearIntervalTimeout && !isTimeout) {

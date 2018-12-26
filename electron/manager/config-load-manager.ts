@@ -7,8 +7,6 @@ import {
   BootstrapEventBus,
   BootstrapArg
 } from "../bootstrap/bootstrap-event-bus";
-import { Storage } from "../infrastructure/types";
-import { StorageFile } from "../Infrastructure/storage-file";
 import { BootstrapContext } from "../bootstrap/bootstrap-context";
 import { EventHandler } from "../infrastructure/event-bus";
 
@@ -61,7 +59,7 @@ export type GetOptionMethod<T> = <T extends {}>(
 @injectable()
 export class ConfigLoadManager extends BaseManager {
   private _configFile: string = "";
-  private _configStorage: StorageFile;
+  //private _configStorage: StorageFile;
   constructor(
     @inject(nameof(BootstrapEventBus)) bootstrapEventBus: BootstrapEventBus
   ) {
@@ -90,9 +88,9 @@ export class ConfigLoadManager extends BaseManager {
       preparingHandle: async () => {
         return async function(this: BootstrapContext, arg: BootstrapArg) {
           console.log("ConfigLoadManager preparing");
-          self._configFile = this.startOptionFile;
-          self._configStorage = new StorageFile(self._configFile);
-          self._configStorage.asyncGet
+          // self._configFile = this.startOptionFile;
+          // self._configStorage = new StorageFile(self._configFile);
+          // self._configStorage.asyncGet
           return;
         };
       },

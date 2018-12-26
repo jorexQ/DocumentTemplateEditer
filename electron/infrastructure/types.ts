@@ -12,6 +12,7 @@ export type BaseEventKey =
   | "enter-full-screen"
   | "leave-full-screen";
 
+
 export interface StateConfig {
   fullScreen?: boolean;
   devToolsOpened?: boolean;
@@ -25,30 +26,23 @@ export interface ExtensionConfig {
   extensionTokens?: string[];
 }
 
-export interface AsyncStorage {
-  asyncGet<T extends any>(key: string): Promise<T>;
-  asyncSet<T extends any>(key: string, obj: T): Promise<void>;
-  asyncHas(key: string): Promise<boolean>;
-  asyncKeys(): Promise<string[]>;
-  asyncRemove(key: string): Promise<void>;
-  asyncClear(): Promise<void>;
-  asyncGetMany<T extends any>(keys: string[]): Promise<T[]>;
-}
-
-export interface SyncStorage {
-  get<T extends any>(key: string): T;
-  set<T extends any>(key: string, obj: T): void;
-  has(key: string): boolean;
-  keys(): string[];
-  remove(key: string): void;
-  clear(): void;
-  getMany<T extends any>(keys: string[]): T[];
-}
-
-export interface Storage extends SyncStorage, AsyncStorage {}
 
 export type Readonly<T> = { readonly [P in keyof T]: T[P] };
 
 export type Nullable<T> = T | null;
 
-export type Undefinedable<T> = T | undefined;
+export type Undefinable<T> = T | undefined;
+
+export type TypeName<T> = T extends string
+  ? "string"
+  : T extends number
+  ? "number"
+  : T extends boolean
+  ? "boolean"
+  : T extends undefined
+  ? "undefined"
+  : T extends Function
+  ? "function"
+  : T extends Buffer
+  ? "buffer"
+  : "object";

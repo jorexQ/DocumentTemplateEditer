@@ -1,5 +1,5 @@
 //
-type NullOrUnderfined = null | undefined;
+type NullOrUndefined = null | undefined;
 
 /**
  *
@@ -20,7 +20,7 @@ export function isPromise<T>(obj: any): obj is Promise<T> {
  * @param {*} obj
  * @returns {obj is NullOrUnderfined}
  */
-export function isNullOrUnderfined(obj: any): obj is NullOrUnderfined {
+export function isNullOrUndefined(obj: any): obj is NullOrUndefined {
   return obj === null || obj === undefined;
 }
 
@@ -98,4 +98,30 @@ export function nameof<T>(nameFunction: { new (...params: any[]): T }): string {
 
   // Invalid function.
   throw new Error("nameof: Invalid function syntax.");
+}
+
+//export function isType(obj: any, type: NumberConstructor): obj is number;
+//export function isType(obj: any, type: StringConstructor): obj is string;
+export function isType<T>(obj: any, type: { prototype: T }): obj is T;
+export function isType(obj: any, type: any): boolean {
+    const objType: string = typeof obj;
+    const typeString = type.toString();
+    const nameRegex: RegExp = /Arguments|Function|String|Number|Date|Array|Boolean|RegExp/;
+
+    let typeName: string;
+
+    if (obj && objType === "object") {
+        return obj instanceof type;
+    }
+
+    if (typeString.startsWith("class ")) {
+        return type.name.toLowerCase() === objType;
+    }
+
+    typeName = typeString.match(nameRegex);
+    if (typeName) {
+        return typeName[0].toLowerCase() === objType;
+    }
+
+    return false;
 }
