@@ -1,4 +1,5 @@
-import { isType, nameof } from "../infrastructure/base-tool";
+import { isType, nameof, tryJsonParse } from "../infrastructure/base-tool";
+import { tryDoStatus } from "../infrastructure/try-do-types";
 import {
   StorageResult,
   StorageValue,
@@ -14,7 +15,12 @@ export class StorageJson implements StorageValue<any> {
 
   constructor(jsonStr: string) {
     this._srcJsonStr = jsonStr;
-    this._jsonObject = JSON.parse(jsonStr);
+    let tryDoResult = tryJsonParse(jsonStr);
+    if (tryDoResult.status == tryDoStatus.success) {
+      this._jsonObject = tryDoResult.result;
+    } else {
+      throw new TypeError("");
+    }
   }
 
   get<T extends any>(key: string, type: any): StorageResult<T> {

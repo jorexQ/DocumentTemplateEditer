@@ -1,3 +1,5 @@
+import { TryDoResult, succResult, failResult, errResult } from "./try-do-types";
+
 //
 type NullOrUndefined = null | undefined;
 
@@ -25,7 +27,7 @@ export function isNullOrUndefined(obj: any): obj is NullOrUndefined {
 }
 
 export function nameof<T>(nameFunction: { new (...params: any[]): T }): string {
-  if(nameFunction.name){
+  if (nameFunction.name) {
     return nameFunction.name;
   }
   var fnStr = nameFunction.toString();
@@ -104,24 +106,50 @@ export function nameof<T>(nameFunction: { new (...params: any[]): T }): string {
 //export function isType(obj: any, type: StringConstructor): obj is string;
 export function isType<T>(obj: any, type: { prototype: T }): obj is T;
 export function isType(obj: any, type: any): boolean {
-    const objType: string = typeof obj;
-    const typeString = type.toString();
-    const nameRegex: RegExp = /Arguments|Function|String|Number|Date|Array|Boolean|RegExp/;
+  const objType: string = typeof obj;
+  const typeString = type.toString();
+  const nameRegex: RegExp = /Arguments|Function|String|Number|Date|Array|Boolean|RegExp/;
 
-    let typeName: string;
+  let typeName: string;
 
-    if (obj && objType === "object") {
-        return obj instanceof type;
+  if (obj && objType === "object") {
+    return obj instanceof type;
+  }
+
+  if (typeString.startsWith("class ")) {
+    return type.name.toLowerCase() === objType;
+  }
+
+  typeName = typeString.match(nameRegex);
+  if (typeName) {
+    return typeName[0].toLowerCase() === objType;
+  }
+
+  return false;
+}
+
+export function isJSONStr(str: string): boolean {
+  try {
+    let parseData = JSON.parse(str);
+    if (parseData && typeof parseData === "object") {
+      return true;
+    } else {
+      return false;
     }
-
-    if (typeString.startsWith("class ")) {
-        return type.name.toLowerCase() === objType;
-    }
-
-    typeName = typeString.match(nameRegex);
-    if (typeName) {
-        return typeName[0].toLowerCase() === objType;
-    }
-
+  } catch {
     return false;
+  }
+}
+
+export function tryJsonParse<T extends {}>(str: string): TryDoResult<T> {
+  try {
+    let parseData = JSON.parse(str);
+    if (parseData && typeof parseData === "object") {
+      return succResult(<T>parseData);
+    } else {
+      return failResult("");
+    }
+  } catch {
+    return failResult("");
+  }
 }
